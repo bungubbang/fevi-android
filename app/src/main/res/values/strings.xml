@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Fadong</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="drawer_open">open drawer</string>
+    <string name="drawer_close">close drawer</string>
+
+
+    <string-array name="menu_array">
+        <item>Trend</item>
+        <item>Music</item>
+        <item>Sport</item>
+        <item>Game</item>
+    </string-array>
+</resources>
