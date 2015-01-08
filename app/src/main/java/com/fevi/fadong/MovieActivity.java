@@ -1,16 +1,22 @@
 package com.fevi.fadong;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.media.session.MediaSession;
 import android.net.Uri;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.MediaController;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.fevi.fadong.support.CircleTransform;
@@ -31,7 +37,7 @@ public class MovieActivity extends ActionBarActivity {
         String cardProfile = intent.getStringExtra(ContextString.cardProfile);
         String cardPicture = intent.getStringExtra(ContextString.cardPicture);
         String cardDescription = intent.getStringExtra(ContextString.cardDescription);
-        String cardSource = intent.getStringExtra(ContextString.cardSource);
+        final String cardSource = intent.getStringExtra(ContextString.cardSource);
 
 
         TextView name = (TextView) findViewById(R.id.fa_name);
@@ -43,12 +49,39 @@ public class MovieActivity extends ActionBarActivity {
 
         ImageView profile = (ImageView) findViewById(R.id.fa_profile);
         Picasso.with(this).load(cardProfile).transform(new CircleTransform()).into(profile);
-        VideoView picture = (VideoView) findViewById(R.id.fa_picture);
-        picture.setVideoURI(Uri.parse(cardSource));
+
+        final VideoView videoView = (VideoView) findViewById(R.id.fa_picture);
+        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+
         MediaController mc = new MediaController(this);
-        mc.setAnchorView(picture);
-        picture.setMediaController(mc);
-        picture.start();
+        mc.setAnchorView(videoView);
+
+        videoView.setVideoURI(Uri.parse(cardSource));
+        videoView.setMediaController(mc);
+
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
+                    @Override
+                    public void onBufferingUpdate(MediaPlayer mp, int percent) {
+                        progressBar.setVisibility(View.GONE);
+                        videoView.start();
+                    }
+                });
+            }
+        });
+
+        ImageView fullscreenIcon = (ImageView) findViewById(R.id.fullscreen_icon);
+        fullscreenIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent fullScreenIntent = new Intent(v.getContext(), FullScreenVideoActivity.class);
+                fullScreenIntent.putExtra(ContextString.cardSource, cardSource);
+
+                v.getContext().startActivity(fullScreenIntent);
+            }
+        });
 
     }
 

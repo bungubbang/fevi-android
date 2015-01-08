@@ -37,14 +37,38 @@
             android:layout_marginBottom="10dp"/>
     </RelativeLayout>
 
-        <VideoView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/fa_picture"
-            android:background="#111"
-            android:minHeight="150dp"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="#111">
 
-        <TextView
+        <VideoView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_alignParentTop="true"
+            android:id="@+id/fa_picture"/>
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressBar"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fullscreen_icon"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="10dp"
+            android:src="@drawable/ic_action_full_screen"/>
+
+    </RelativeLayout>
+
+    <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="동영상 소개내용들..."
@@ -53,7 +77,6 @@
             android:ellipsize="end"
             android:maxLines="3"
             android:layout_toRightOf="@+id/fa_picture"/>
-
 
 
 

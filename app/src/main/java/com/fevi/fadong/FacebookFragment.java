@@ -32,7 +32,7 @@ import java.util.concurrent.ExecutionException;
 public class FacebookFragment extends Fragment {
 
     public static final String ARG_MENU_NUMBER = "menu_number";
-    public static final String API_URL = "http://192.168.219.119:8080/api/card?category=";
+    public static final String API_URL = "http://fe-vi.com/api/card?category=";
 
     public FacebookFragment() { }
 
@@ -105,7 +105,12 @@ public class FacebookFragment extends Fragment {
     }
 
     private List<Card> parseToCard(JSONObject object) {
+
         List<Card> cards = new ArrayList<>();
+        if(object == null) {
+            return cards;
+        }
+
         try {
             JSONArray content = object.getJSONArray("content");
             for (int i = 0; i < content.length(); i++) {

@@ -34,14 +34,15 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mTitle = "test";
+        mTitle = "Fadong";
 
-        mPlanetTitles = new String[]{"one", "two", "three"};
+        String[] menus = getResources().getStringArray(R.array.menu_array);
+        mPlanetTitles = menus;
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
 
-        List<MenuList> menuLists = Lists.newArrayList(new MenuList(1, "one"), new MenuList(1, "two"), new MenuList(1, "three"));
+        List<MenuList> menuLists = Lists.newArrayList(new MenuList(1, menus[0]), new MenuList(1, menus[1]), new MenuList(1, menus[2]), new MenuList(1, menus[3]));
         MenuListAdapter menuListAdapter = new MenuListAdapter(this, R.layout.drawer_list_item, menuLists);
         // Set the adapter for the list view
         mDrawerList.setAdapter(menuListAdapter);

@@ -15,5 +15,9 @@
     </string-array>
 
     <string name="title_activity_movie">MovieActivity</string>
+    <string name="title_activity_full_video">FullVideoActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_full_screen_video">FullScreenVideoActivity</string>
 
 </resources>
