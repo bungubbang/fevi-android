@@ -11,9 +11,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.fevi.fadong.MovieActivity;
 import com.fevi.fadong.R;
 import com.fevi.fadong.adapter.dto.Card;
 import com.fevi.fadong.support.CircleTransform;
+import com.fevi.fadong.support.ContextString;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -56,6 +58,7 @@ public class FaAdapter extends ArrayAdapter<Card> {
         Picasso.with(context).load(card.getPicture()).into(adapterHolder.picture);
 
         adapterHolder.picture.setOnClickListener(new FacebookPictureClickListener(card.getSource()));
+        adapterHolder.description.setOnClickListener(new DescriptionClickListener(card));
 
         return v;
     }
@@ -91,6 +94,28 @@ public class FaAdapter extends ArrayAdapter<Card> {
             Log.e("source", source);
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setDataAndType(Uri.parse(source), "video/*");
+
+            v.getContext().startActivity(intent);
+        }
+    }
+
+    private class DescriptionClickListener implements TextView.OnClickListener {
+
+        private Card card;
+
+        private DescriptionClickListener(Card card) {
+            this.card = card;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(v.getContext(), MovieActivity.class);
+            intent.putExtra(ContextString.cardProfile, card.getProfile_image());
+            intent.putExtra(ContextString.cardName, card.getName());
+            intent.putExtra(ContextString.cardTime, card.getUpdated_time());
+            intent.putExtra(ContextString.cardPicture, card.getPicture());
+            intent.putExtra(ContextString.cardDescription, card.getDescription());
+            intent.putExtra(ContextString.cardSource, card.getSource());
 
             v.getContext().startActivity(intent);
         }

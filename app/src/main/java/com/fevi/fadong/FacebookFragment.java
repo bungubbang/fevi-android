@@ -32,7 +32,7 @@ import java.util.concurrent.ExecutionException;
 public class FacebookFragment extends Fragment {
 
     public static final String ARG_MENU_NUMBER = "menu_number";
-    public static final String API_URL = "http://10.202.30.133:8080/api/card?category=";
+    public static final String API_URL = "http://192.168.219.119:8080/api/card?category=";
 
     public FacebookFragment() { }
 
