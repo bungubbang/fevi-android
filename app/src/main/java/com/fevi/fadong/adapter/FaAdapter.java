@@ -3,12 +3,12 @@ package com.fevi.fadong.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fevi.fadong.MovieActivity;
@@ -57,9 +57,8 @@ public class FaAdapter extends ArrayAdapter<Card> {
         Picasso.with(context).load(card.getProfile_image()).transform(new CircleTransform()).into(adapterHolder.profile);
         Picasso.with(context).load(card.getPicture()).into(adapterHolder.picture);
 
-        adapterHolder.picture.setOnClickListener(new FacebookPictureClickListener(card.getSource()));
-        adapterHolder.description.setOnClickListener(new DescriptionClickListener(card));
-
+        LinearLayout faList = (LinearLayout) v.findViewById(R.id.fa_list);
+        faList.setOnClickListener(new DetailClickListener(card));
         return v;
     }
 
@@ -81,29 +80,11 @@ public class FaAdapter extends ArrayAdapter<Card> {
         TextView time;
     }
 
-    private class FacebookPictureClickListener implements ImageView.OnClickListener {
-
-        private String source;
-
-        private FacebookPictureClickListener(String source) {
-            this.source = source;
-        }
-
-        @Override
-        public void onClick(View v) {
-            Log.e("source", source);
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.parse(source), "video/*");
-
-            v.getContext().startActivity(intent);
-        }
-    }
-
-    private class DescriptionClickListener implements TextView.OnClickListener {
+    private class DetailClickListener implements TextView.OnClickListener {
 
         private Card card;
 
-        private DescriptionClickListener(Card card) {
+        private DetailClickListener(Card card) {
             this.card = card;
         }
 

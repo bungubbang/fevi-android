@@ -1,5 +1,6 @@
 package com.fevi.fadong;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.session.MediaSession;
@@ -12,6 +13,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.ProgressBar;
@@ -24,11 +27,17 @@ import com.fevi.fadong.support.ContextString;
 import com.squareup.picasso.Picasso;
 
 
-public class MovieActivity extends ActionBarActivity {
+public class MovieActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        WindowManager.LayoutParams lpWindow = new WindowManager.LayoutParams();
+        lpWindow.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        lpWindow.dimAmount = 0.7f;
+        getWindow().setAttributes(lpWindow);
+
         setContentView(R.layout.activity_movie);
 
         Intent intent = getIntent();
@@ -62,13 +71,8 @@ public class MovieActivity extends ActionBarActivity {
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
-                mp.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
-                    @Override
-                    public void onBufferingUpdate(MediaPlayer mp, int percent) {
-                        progressBar.setVisibility(View.GONE);
-                        videoView.start();
-                    }
-                });
+                progressBar.setVisibility(View.GONE);
+                videoView.start();
             }
         });
 
@@ -76,10 +80,23 @@ public class MovieActivity extends ActionBarActivity {
         fullscreenIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent fullScreenIntent = new Intent(v.getContext(), FullScreenVideoActivity.class);
-                fullScreenIntent.putExtra(ContextString.cardSource, cardSource);
+                // 자체 플레이어 호출
+                // Intent fullScreenIntent = new Intent(v.getContext(), FullScreenVideoActivity.class);
+                // fullScreenIntent.putExtra(ContextString.cardSource, cardSource);
+                // v.getContext().startActivity(fullScreenIntent);
 
-                v.getContext().startActivity(fullScreenIntent);
+                // 미디어 인텐트 호출
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.parse(cardSource), "video/*");
+                v.getContext().startActivity(intent);
+            }
+        });
+
+        ImageView closeButton = (ImageView) findViewById(R.id.closeButton);
+        closeButton.setOnClickListener(new ImageView.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 

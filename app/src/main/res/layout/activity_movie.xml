@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#fff">
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:layout_margin="5dp">
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="0dp"
+        android:id="@+id/profile_layout"
+        android:background="#fff">
+
 
         <ImageView
             android:layout_width="50dp"
@@ -35,18 +40,23 @@
             android:textSize="10sp"
             android:layout_toRightOf="@+id/fa_profile"
             android:layout_marginBottom="10dp"/>
+
+
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="#111">
+        android:background="#111"
+        android:layout_below="@+id/profile_layout"
+        android:id="@+id/video_layout">
 
         <VideoView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_alignParentTop="true"
+            android:background="#111"
             android:id="@+id/fa_picture"/>
 
         <ProgressBar
@@ -68,16 +78,40 @@
 
     </RelativeLayout>
 
-    <TextView
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="0dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="#fff"
+        android:layout_below="@+id/video_layout">
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="동영상 소개내용들..."
             android:id="@+id/fa_description"
             android:layout_margin="10dp"
             android:ellipsize="end"
-            android:maxLines="3"
-            android:layout_toRightOf="@+id/fa_picture"/>
+            android:maxLines="3"/>
+
+    </RelativeLayout>
+
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/closeButton"
+        android:src="@drawable/close"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        />
 
 
 
-</LinearLayout>
+</RelativeLayout>

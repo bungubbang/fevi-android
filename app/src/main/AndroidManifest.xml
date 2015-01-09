@@ -22,6 +22,7 @@
         <activity
             android:name=".MovieActivity"
             android:label="@string/title_activity_movie"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:screenOrientation="portrait">
         </activity>
         <activity
