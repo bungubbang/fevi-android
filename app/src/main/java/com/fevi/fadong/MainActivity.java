@@ -2,6 +2,7 @@ package com.fevi.fadong;
 
 
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -9,10 +10,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.fevi.fadong.adapter.dto.MenuList;
@@ -28,6 +31,7 @@ public class MainActivity extends ActionBarActivity {
     private ListView mDrawerList;
     private CharSequence mTitle;
     private ActionBarDrawerToggle mDrawerToggle;
+    private LinearLayout leftDrawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +43,15 @@ public class MainActivity extends ActionBarActivity {
         String[] menus = getResources().getStringArray(R.array.menu_array);
         mPlanetTitles = menus;
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer_list);
+        leftDrawer = (LinearLayout) findViewById(R.id.left_drawer);
 
 
-        List<MenuList> menuLists = Lists.newArrayList(new MenuList(1, menus[0]), new MenuList(1, menus[1]), new MenuList(1, menus[2]), new MenuList(1, menus[3]));
+        List<MenuList> menuLists = Lists.newArrayList(
+                new MenuList(getResources().getDrawable(R.drawable.appbar_star_invincible_color), menus[0]),
+                new MenuList(getResources().getDrawable(R.drawable.appbar_hardware_headset_color), menus[1]),
+                new MenuList(getResources().getDrawable(R.drawable.appbar_bike_color), menus[2]),
+                new MenuList(getResources().getDrawable(R.drawable.appbar_controller_snes_color), menus[3]));
         MenuListAdapter menuListAdapter = new MenuListAdapter(this, R.layout.drawer_list_item, menuLists);
         // Set the adapter for the list view
         mDrawerList.setAdapter(menuListAdapter);
@@ -129,7 +138,7 @@ public class MainActivity extends ActionBarActivity {
         // Highlight the selected item, update the title, and close the drawer
         mDrawerList.setItemChecked(position, true);
         setTitle(mPlanetTitles[position]);
-        mDrawerLayout.closeDrawer(mDrawerList);
+        mDrawerLayout.closeDrawer(leftDrawer);
     }
 
     @Override

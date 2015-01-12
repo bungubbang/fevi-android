@@ -41,6 +41,7 @@ public class MenuListAdapter extends ArrayAdapter<MenuList> {
         adapterHolder.textView = (TextView) v.findViewById(R.id.textView);
 
         adapterHolder.textView.setText(menuList.getMenuName());
+        adapterHolder.imageView.setImageDrawable(menuList.getMenuIcon());
 
         return v;
     }

@@ -2,24 +2,18 @@ package com.fevi.fadong;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.MediaPlayer;
-import android.media.session.MediaSession;
 import android.net.Uri;
-import android.support.v4.media.session.MediaSessionCompat;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.fevi.fadong.support.CircleTransform;
@@ -68,11 +62,14 @@ public class MovieActivity extends Activity {
         videoView.setVideoURI(Uri.parse(cardSource));
         videoView.setMediaController(mc);
 
+        videoView.setBackgroundColor(Color.BLACK);
+
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
                 progressBar.setVisibility(View.GONE);
                 videoView.start();
+                videoView.setBackgroundColor(Color.TRANSPARENT);
             }
         });
 
