@@ -9,8 +9,9 @@
 
     <string-array name="menu_array">
         <item>Trend</item>
+        <item>Pet</item>
         <item>Music</item>
-        <item>Sport</item>
+        <item>Sports</item>
         <item>Game</item>
     </string-array>
 
@@ -19,5 +20,6 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_full_screen_video">FullScreenVideoActivity</string>
+    <string name="title_activity_login">LoginActivity</string>
 
 </resources>

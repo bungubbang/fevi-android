@@ -49,9 +49,11 @@ public class MainActivity extends ActionBarActivity {
 
         List<MenuList> menuLists = Lists.newArrayList(
                 new MenuList(getResources().getDrawable(R.drawable.appbar_star_invincible_color), menus[0]),
-                new MenuList(getResources().getDrawable(R.drawable.appbar_hardware_headset_color), menus[1]),
-                new MenuList(getResources().getDrawable(R.drawable.appbar_bike_color), menus[2]),
-                new MenuList(getResources().getDrawable(R.drawable.appbar_controller_snes_color), menus[3]));
+                new MenuList(getResources().getDrawable(R.drawable.appbar_flag_bear_color), menus[1]),
+                new MenuList(getResources().getDrawable(R.drawable.appbar_hardware_headset_color), menus[2]),
+                new MenuList(getResources().getDrawable(R.drawable.appbar_bike_color), menus[3]),
+                new MenuList(getResources().getDrawable(R.drawable.appbar_controller_snes_color), menus[4]));
+
         MenuListAdapter menuListAdapter = new MenuListAdapter(this, R.layout.drawer_list_item, menuLists);
         // Set the adapter for the list view
         mDrawerList.setAdapter(menuListAdapter);

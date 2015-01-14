@@ -1,0 +1,71 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/blurred_background"
+    tools:context="com.fevi.fadong.LoginActivity">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/fa_fill">
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/fadong"
+            android:layout_gravity="center"/>
+
+        <EditText
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/fa_id_field"
+            android:layout_gravity="center_horizontal"
+            android:hint="ID"/>
+
+        <EditText
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:id="@+id/fa_password_field"
+            android:layout_gravity="center_horizontal"
+            android:hint="PASSWORD"/>
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Auto Login"
+            android:id="@+id/fa_auto_field"
+            android:layout_gravity="right"
+            android:layout_marginRight="30dp"/>
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="SIGN UP"
+        android:textSize="10sp"
+        android:id="@+id/fa_signup_button"
+        android:layout_below="@+id/fa_fill"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="30dp"/>
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="LOGIN"
+        android:textSize="10sp"
+        android:id="@+id/fa_login_button"
+        android:layout_below="@+id/fa_fill"
+        android:layout_toLeftOf="@+id/fa_signup_button"
+        android:layout_toStartOf="@+id/fa_signup_button" />
+
+
+</RelativeLayout>

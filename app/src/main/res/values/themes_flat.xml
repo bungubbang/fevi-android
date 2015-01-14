@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Generated with http://android-holo-colors.com -->
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <style name="Flat" parent="Theme.AppCompat">
+
+    <item name="android:editTextStyle">@style/EditTextFlat</item>
+
+    <item name="android:textColorHighlight">#9933b5e5</item>
+
+    <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewFlat</item>
+
+    <item name="android:checkboxStyle">@style/CheckBoxFlat</item>
+
+    <item name="android:buttonStyle">@style/ButtonFlat</item>
+
+    <item name="android:imageButtonStyle">@style/ImageButtonFlat</item>
+
+  </style>
+
+</resources>
