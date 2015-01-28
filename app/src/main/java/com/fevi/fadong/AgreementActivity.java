@@ -8,39 +8,44 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 
-public class LoginActivity extends Activity {
+public class AgreementActivity extends Activity {
+
+    private boolean pushAgree = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_agreement);
 
-        Button loginButton = (Button) findViewById(R.id.fa_login_button);
-        loginButton.setOnClickListener(new Button.OnClickListener() {
+        final CheckBox pushCheckBox = (CheckBox) findViewById(R.id.push_check);
+        pushCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                pushAgree = pushCheckBox.isChecked();
+            }
+        });
+
+        Button signUpButton = (Button) findViewById(R.id.signup);
+        signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), MainActivity.class);
+                Intent intent = new Intent(v.getContext(), SignUpActivity.class);
+                intent.putExtra("pushAgree", pushAgree);
                 v.getContext().startActivity(intent);
             }
         });
 
-        Button signUpButton = (Button) findViewById(R.id.fa_signup_button);
-        signUpButton.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), AgreementActivity.class);
-                v.getContext().startActivity(intent);
-            }
-        });
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_login, menu);
+        getMenuInflater().inflate(R.menu.menu_agreement, menu);
         return true;
     }
 
