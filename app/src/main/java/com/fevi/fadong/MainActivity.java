@@ -5,6 +5,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -30,6 +31,7 @@ import android.widget.ListView;
 
 import com.fevi.fadong.adapter.dto.MenuList;
 import com.fevi.fadong.adapter.MenuListAdapter;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import java.util.List;
@@ -43,11 +45,14 @@ public class MainActivity extends ActionBarActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private LinearLayout leftDrawer;
 
+    SharedPreferences loginPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        loginPreferences = getSharedPreferences(getResources().getString(R.string.loginPref), MODE_PRIVATE);
         checkLogin();
 
         mTitle = "Fadong";
@@ -169,9 +174,11 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void checkLogin() {
-//        if() {
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-//        }
+        String id = loginPreferences.getString("id", null);
+        String password = loginPreferences.getString("password", null);
+        Log.e("idp", id + " : " +password);
+        if((!Strings.isNullOrEmpty(id) && !Strings.isNullOrEmpty(password))) {
+            this.finish();
+        }
     }
 }
