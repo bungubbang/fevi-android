@@ -26,5 +26,6 @@
     <string name="title_activity_agreement">AgreementActivity</string>
     <string name="title_activity_sign_up">SignUpActivity</string>
     <string name="title_activity_invite">InviteActivity</string>
+    <string name="title_activity_intro">IntroActivity</string>
 
 </resources>

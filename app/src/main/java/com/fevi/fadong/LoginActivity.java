@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.fevi.fadong.domain.Member;
 import com.fevi.fadong.support.FadongHttpClient;
+import com.fevi.fadong.support.LoginCall;
 import com.fevi.fadong.support.MemberInfoFactory;
 import com.google.common.base.Strings;
 
@@ -52,9 +53,6 @@ public class LoginActivity extends Activity {
         member.setPassword(password);
         new MemberInfoFactory(member, this).getInfo();
 
-        if(checkAutoLogin(id, password, isAutoLogin)) {
-            checkLoginCode(this, member, isAutoLogin);
-        }
 
         Button loginButton = (Button) findViewById(R.id.fa_login_button);
         loginButton.setOnClickListener(new Button.OnClickListener() {
@@ -79,38 +77,8 @@ public class LoginActivity extends Activity {
         });
     }
 
-    private boolean checkAutoLogin(String id, String password, boolean isAutoLogin) {
-        return (!Strings.isNullOrEmpty(id) && !Strings.isNullOrEmpty(password) && isAutoLogin);
-    }
-
     private void checkLoginCode(Context context, Member member, boolean isAutoLogin) {
-        Log.e("member1", member.getParameter());
-        String result = null;
-        try {
-            result = (String) new LoginCall().execute(member).get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-        Uri uri = Uri.parse("?" + result);
-        Log.e("result", result);
-        Log.e("uri", uri.getQueryParameter("code"));
-        switch (uri.getQueryParameter("code")) {
-            case "0": // 로그인 실패
-                Toast.makeText(context, "ID / Password 가 일치 하지 않습니다.", Toast.LENGTH_SHORT).show();
-                break;
-            case "1": // 로그인 성공
-                saveLogin(isAutoLogin, member);
-
-                Intent mainIntent = new Intent(context, MainActivity.class);
-                context.startActivity(mainIntent);
-                break;
-            case "2": // 로그인 성공 / 친구초대 5명 미만, 친구 초대 필요
-                saveLogin(isAutoLogin, member);
-
-                Intent inviteIntent = new Intent(context, InviteActivity.class);
-                context.startActivity(inviteIntent);
-                break;
-        }
+        new LoginCall(this, member, isAutoLogin).execute();
     }
 
     private void saveLogin(boolean isAutoLogin, Member member) {
@@ -125,15 +93,6 @@ public class LoginActivity extends Activity {
             loginPreEdit.apply();
         }
     }
-
-    public class LoginCall extends AsyncTask {
-        @Override
-        protected Object doInBackground(Object[] params) {
-            Member member = (Member) params[0];
-            return new FadongHttpClient().sendLogin(LOG_IN_URL, member.getParameter());
-        }
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -157,5 +116,48 @@ public class LoginActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    private class LoginCall extends AsyncTask <Object, Void, String> {
+
+        private LoginActivity loginActivity;
+        private Member member;
+        private boolean isAutoLogin;
+
+        private LoginCall(LoginActivity loginActivity, Member member, boolean isAutoLogin) {
+            this.loginActivity = loginActivity;
+            this.member = member;
+            this.isAutoLogin = isAutoLogin;
+        }
+
+        @Override
+        protected String doInBackground(Object... params) {
+            return new FadongHttpClient().sendLogin(LOG_IN_URL, member.getParameter());
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            Uri uri = Uri.parse("?" + result);
+            switch (uri.getQueryParameter("code")) {
+                case "0": // 로그인 실패
+                    Toast.makeText(loginActivity, "ID / Password 가 일치 하지 않습니다.", Toast.LENGTH_SHORT).show();
+                    break;
+                case "1": // 로그인 성공
+                    saveLogin(isAutoLogin, member);
+
+                    Intent mainIntent = new Intent(loginActivity, MainActivity.class);
+                    loginActivity.startActivity(mainIntent);
+                    loginActivity.finish();
+                    break;
+                case "2": // 로그인 성공 / 친구초대 5명 미만, 친구 초대 필요
+                    saveLogin(isAutoLogin, member);
+
+                    Intent inviteIntent = new Intent(loginActivity, InviteActivity.class);
+                    loginActivity.startActivity(inviteIntent);
+                    loginActivity.finish();
+                    break;
+            }
+        }
+    }
 
 }

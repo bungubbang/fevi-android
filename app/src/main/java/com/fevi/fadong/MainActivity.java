@@ -31,9 +31,11 @@ import android.widget.ListView;
 
 import com.fevi.fadong.adapter.dto.MenuList;
 import com.fevi.fadong.adapter.MenuListAdapter;
+import com.fevi.fadong.domain.Member;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class MainActivity extends ActionBarActivity {
@@ -44,6 +46,7 @@ public class MainActivity extends ActionBarActivity {
     private CharSequence mTitle;
     private ActionBarDrawerToggle mDrawerToggle;
     private LinearLayout leftDrawer;
+    private Member member;
 
     SharedPreferences loginPreferences;
 
@@ -54,6 +57,7 @@ public class MainActivity extends ActionBarActivity {
 
         loginPreferences = getSharedPreferences(getResources().getString(R.string.loginPref), MODE_PRIVATE);
         checkLogin();
+        Log.e("fadong", member.toString());
 
         mTitle = "Fadong";
 
@@ -153,7 +157,6 @@ public class MainActivity extends ActionBarActivity {
         fragmentTransaction.replace(R.id.content_frame, fragment);
         fragmentTransaction.commit();
 
-
         // Highlight the selected item, update the title, and close the drawer
         mDrawerList.setItemChecked(position, true);
         setTitle(mPlanetTitles[position]);
@@ -174,10 +177,11 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void checkLogin() {
-        String id = loginPreferences.getString("id", null);
-        String password = loginPreferences.getString("password", null);
-        Log.e("idp", id + " : " +password);
-        if((!Strings.isNullOrEmpty(id) && !Strings.isNullOrEmpty(password))) {
+        Intent intent = getIntent();
+        member = (Member) intent.getSerializableExtra("member");
+        if(member == null) {
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            this.startActivity(loginIntent);
             this.finish();
         }
     }

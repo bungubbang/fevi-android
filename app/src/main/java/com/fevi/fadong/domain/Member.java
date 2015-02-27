@@ -1,9 +1,13 @@
 package com.fevi.fadong.domain;
 
+import java.io.Serializable;
+
 /**
  * Created by 1000742 on 15. 1. 28..
  */
-public class Member {
+public class Member implements Serializable {
+
+    private static final long serialVersionUID = -2069886589819128997L;
 
     private String id = "";
     private String password = "";
@@ -14,6 +18,11 @@ public class Member {
     private String facebookId = "";
     private String gcm = "";
     private String pushAgree = "";
+    private String level = "";
+    private String experience = "";
+    private String nextExperience = "";
+    private String ruby = "";
+    private String heart = "";
 
     public String getId() {
         return id;
@@ -94,6 +103,46 @@ public class Member {
         return false;
     }
 
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public String getExperience() {
+        return experience;
+    }
+
+    public void setExperience(String experience) {
+        this.experience = experience;
+    }
+
+    public String getNextExperience() {
+        return nextExperience;
+    }
+
+    public void setNextExperience(String nextExperience) {
+        this.nextExperience = nextExperience;
+    }
+
+    public String getRuby() {
+        return ruby;
+    }
+
+    public void setRuby(String ruby) {
+        this.ruby = ruby;
+    }
+
+    public String getHeart() {
+        return heart;
+    }
+
+    public void setHeart(String heart) {
+        this.heart = heart;
+    }
+
     public String getParameter() {
         StringBuilder sb = new StringBuilder();
         sb.append("id=").append(getId())
@@ -109,7 +158,7 @@ public class Member {
 
     @Override
     public String toString() {
-        return "MemberInfo{" +
+        return "Member{" +
                 "id='" + id + '\'' +
                 ", password='" + password + '\'' +
                 ", passwordRepeat='" + passwordRepeat + '\'' +
@@ -119,6 +168,11 @@ public class Member {
                 ", facebookId='" + facebookId + '\'' +
                 ", gcm='" + gcm + '\'' +
                 ", pushAgree='" + pushAgree + '\'' +
+                ", level='" + level + '\'' +
+                ", experience='" + experience + '\'' +
+                ", nextExperience='" + nextExperience + '\'' +
+                ", ruby='" + ruby + '\'' +
+                ", heart='" + heart + '\'' +
                 '}';
     }
 }
