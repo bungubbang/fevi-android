@@ -45,8 +45,10 @@ public class IntroActivity extends Activity {
             new MemberInfoFactory(member, this).getInfo();
             new LoginCall(this, true, member, mProgressDialog).execute();
         } else {
+            mProgressDialog.dismiss();
             Intent loginIntent = new Intent(this, LoginActivity.class);
             this.startActivity(loginIntent);
+            this.finish();
         }
 
     }

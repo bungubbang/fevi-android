@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import com.fevi.fadong.support.AddExperienceCall;
 import com.fevi.fadong.support.CircleTransform;
 import com.fevi.fadong.support.ContextString;
 import com.squareup.picasso.Picasso;
@@ -96,6 +97,8 @@ public class MovieActivity extends Activity {
                 finish();
             }
         });
+
+        new AddExperienceCall(this).execute();
 
     }
 

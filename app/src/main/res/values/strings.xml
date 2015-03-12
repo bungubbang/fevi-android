@@ -27,5 +27,6 @@
     <string name="title_activity_sign_up">SignUpActivity</string>
     <string name="title_activity_invite">InviteActivity</string>
     <string name="title_activity_intro">IntroActivity</string>
+    <string name="logout">로그아웃</string>
 
 </resources>

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -36,6 +37,11 @@ public class FacebookFragment extends Fragment {
     public static final String ARG_MENU_NUMBER = "menu_number";
     public static final String API_URL = "http://fe-vi.com/api/card?category=";
 
+    private int currentPage = 0;
+    FaAdapter faAdapter;
+    String menu_title;
+    List<Card> cards = new ArrayList<>();
+
     public FacebookFragment() { }
 
     public static Fragment newInstance(int position) {
@@ -52,17 +58,16 @@ public class FacebookFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fadong_main, container, false);
 
         int i = getArguments().getInt(ARG_MENU_NUMBER);
-        String menu_title = getResources().getStringArray(R.array.menu_array)[i];
+        menu_title = getResources().getStringArray(R.array.menu_array)[i];
 
         ListView itemListView = (ListView) rootView.findViewById(R.id.fa_item);
 
         try {
-            List<Card> cards = (List<Card>) new ApiCall().execute(menu_title).get();
-            FaAdapter faAdapter = new FaAdapter(getActivity(), R.layout.fragment_facebook, cards);
+            cards = (List<Card>) new ApiCall().execute(menu_title, currentPage).get();
+            faAdapter = new FaAdapter(getActivity(), R.layout.fragment_facebook, cards);
             itemListView.setAdapter(faAdapter);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+            itemListView.setOnScrollListener(new EndlessScrollListener(5));
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
 
@@ -75,17 +80,18 @@ public class FacebookFragment extends Fragment {
         @Override
         protected Object doInBackground(Object[] params) {
             String menu = (String) params[0];
-            List<Card> cards = parseToCard(getJsonObject(menu));
+            int page = (int) params[1];
+            List<Card> cards = parseToCard(getJsonObject(menu, page));
             return cards;
         }
 
 
     }
 
-    private JSONObject getJsonObject(String menu) {
+    private JSONObject getJsonObject(String menu, int page) {
 
         try {
-            HttpURLConnection connection = (HttpURLConnection) new URL(API_URL + menu).openConnection();
+            HttpURLConnection connection = (HttpURLConnection) new URL(API_URL + menu + "&page=" + String.valueOf(page)).openConnection();
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Content-Type", "application/json");
 
@@ -136,6 +142,49 @@ public class FacebookFragment extends Fragment {
         }
 
         return cards;
+    }
+
+
+    public class EndlessScrollListener implements AbsListView.OnScrollListener {
+
+        private int visibleThreshold = 3;
+        private int previousTotal = 0;
+        private boolean loading = true;
+
+        public EndlessScrollListener() {
+        }
+
+        public EndlessScrollListener(int visibleThreshold) {
+            this.visibleThreshold = visibleThreshold;
+        }
+
+        @Override
+        public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+        }
+
+        @Override
+        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+            if (loading) {
+                if (totalItemCount > previousTotal) {
+                    loading = false;
+                    previousTotal = totalItemCount;
+                    currentPage++;
+                }
+            }
+            if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
+
+                try {
+                    cards.addAll((List<Card>) new ApiCall().execute(menu_title, currentPage).get());
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+
+                faAdapter.notifyDataSetChanged();
+                loading = true;
+
+            }
+        }
     }
 }
 

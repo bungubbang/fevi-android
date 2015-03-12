@@ -28,10 +28,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.fevi.fadong.adapter.dto.MenuList;
 import com.fevi.fadong.adapter.MenuListAdapter;
 import com.fevi.fadong.domain.Member;
+import com.fevi.fadong.support.MemberService;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
@@ -142,8 +144,27 @@ public class MainActivity extends ActionBarActivity {
             return true;
         }
         // Handle your other action bar items...
+        switch (item.getItemId()) {
+            case R.id.fadong_logout:
+                MemberService.logout(this);
+                this.finish();
+                break;
+        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void logout() {
+        SharedPreferences.Editor loginPreEdit = loginPreferences.edit();
+        loginPreEdit.putString("id", "");
+        loginPreEdit.putString("password", "");
+        loginPreEdit.putBoolean("isAutoLogin", false);
+
+        loginPreEdit.apply();
+
+        Intent loginIntent = new Intent(this, LoginActivity.class);
+        this.startActivity(loginIntent);
+        this.finish();
     }
 
     /**
@@ -184,5 +205,8 @@ public class MainActivity extends ActionBarActivity {
             this.startActivity(loginIntent);
             this.finish();
         }
+        Log.e("fadong", "second : " + member );
+        TextView leftName = (TextView) findViewById(R.id.left_name);
+        leftName.setText(member.getId());
     }
 }

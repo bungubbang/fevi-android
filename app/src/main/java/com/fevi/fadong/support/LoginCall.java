@@ -44,6 +44,7 @@ public class LoginCall extends AsyncTask <Object, Void, String>{
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
+        mProgressDialog.dismiss();
 
         Uri uri = Uri.parse("?" + result);
         switch (uri.getQueryParameter("code")) {

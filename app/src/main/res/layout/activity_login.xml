@@ -12,14 +12,19 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
         android:id="@+id/fa_fill">
 
 
-        <ImageView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/fadong"
-            android:layout_gravity="center"/>
+            android:text="Fadong"
+            android:textColor="#eee"
+            android:typeface="serif"
+            android:textSize="50sp"
+            android:layout_gravity="center"
+            android:focusableInTouchMode="true" />
 
         <EditText
             android:layout_width="300dp"
@@ -42,30 +47,33 @@
             android:text="Auto Login"
             android:id="@+id/fa_auto_field"
             android:layout_gravity="right"
+            android:checked="true"
             android:layout_marginRight="30dp"/>
 
+
+        <Button
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:text="LOGIN"
+            android:textSize="10sp"
+            android:id="@+id/fa_login_button"
+            android:layout_below="@+id/fa_fill"
+            android:layout_toLeftOf="@+id/fa_signup_button"
+            android:layout_toStartOf="@+id/fa_signup_button"
+            android:layout_gravity="center_horizontal" />
+
+        <Button
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:text="SIGN UP"
+            android:textSize="10sp"
+            android:id="@+id/fa_signup_button"
+            android:layout_alignBottom="@+id/fa_fill"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_gravity="center_horizontal" />
+
     </LinearLayout>
-
-    <Button
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:text="SIGN UP"
-        android:textSize="10sp"
-        android:id="@+id/fa_signup_button"
-        android:layout_below="@+id/fa_fill"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="30dp"/>
-
-    <Button
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:text="LOGIN"
-        android:textSize="10sp"
-        android:id="@+id/fa_login_button"
-        android:layout_below="@+id/fa_fill"
-        android:layout_toLeftOf="@+id/fa_signup_button"
-        android:layout_toStartOf="@+id/fa_signup_button" />
 
 
 </RelativeLayout>

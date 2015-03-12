@@ -94,28 +94,6 @@ public class LoginActivity extends Activity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_login, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     private class LoginCall extends AsyncTask <Object, Void, String> {
 
         private LoginActivity loginActivity;
@@ -146,6 +124,7 @@ public class LoginActivity extends Activity {
                     saveLogin(isAutoLogin, member);
 
                     Intent mainIntent = new Intent(loginActivity, MainActivity.class);
+                    mainIntent.putExtra("member", mappingMemberInfo(member, uri));
                     loginActivity.startActivity(mainIntent);
                     loginActivity.finish();
                     break;
@@ -153,10 +132,20 @@ public class LoginActivity extends Activity {
                     saveLogin(isAutoLogin, member);
 
                     Intent inviteIntent = new Intent(loginActivity, InviteActivity.class);
+                    inviteIntent.putExtra("member", mappingMemberInfo(member, uri));
                     loginActivity.startActivity(inviteIntent);
                     loginActivity.finish();
                     break;
             }
+        }
+
+        private Member mappingMemberInfo(Member member, Uri uri) {
+            member.setLevel(uri.getQueryParameter("level"));
+            member.setExperience(uri.getQueryParameter("exp"));
+            member.setNextExperience(uri.getQueryParameter("next_exp"));
+            member.setRuby(uri.getQueryParameter("rubi"));
+            member.setHeart(uri.getQueryParameter("heart"));
+            return member;
         }
     }
 
