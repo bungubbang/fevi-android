@@ -2,6 +2,8 @@ package com.fevi.fadong.support;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.webkit.JavascriptInterface;
@@ -37,7 +39,7 @@ public class WebViewSetting {
             settings.setDatabasePath(databasePath.getPath());
         }
         settings.setDefaultTextEncodingName("UTF-8");
-        webView.setWebViewClient(new WebViewClientActivity());
+        webView.setWebViewClient(new WebViewClientActivity(activity));
         webView.setWebChromeClient(new WebViewChromeClient());
         webView.addJavascriptInterface(new WebviewBridge(activity), "fevi");
         return webView;
@@ -45,9 +47,34 @@ public class WebViewSetting {
 
     private static class WebViewClientActivity extends WebViewClient {
 
+        private Activity activity;
+        private Handler handler;
+
+        public WebViewClientActivity(Activity activity) {
+            this.activity = activity;
+            handler = new Handler();
+        }
+
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            view.loadUrl(url);
+            if(url.toLowerCase().startsWith("http") || url.toLowerCase().startsWith("https")) {
+                view.loadUrl(url);
+            } else {
+                try {
+                    Uri uri = Uri.parse(url);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    activity.startActivity(intent);
+                } catch (Exception e) {
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast toast = Toast.makeText(activity, "해당 앱을 띄울 수 없습니다.", Toast.LENGTH_LONG);
+                            toast.show();
+                        }
+                    });
+                }
+
+            }
             return true;
         }
     }
