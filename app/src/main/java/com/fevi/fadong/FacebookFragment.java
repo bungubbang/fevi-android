@@ -1,21 +1,26 @@
 package com.fevi.fadong;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.fevi.fadong.adapter.FaAdapter;
 import com.fevi.fadong.adapter.dto.Card;
+import com.fevi.fadong.domain.Member;
+import com.fevi.fadong.support.ContextString;
+import com.fevi.fadong.support.FadongHttpClient;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,7 +32,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by 1000742 on 15. 1. 5..
@@ -35,12 +39,16 @@ import java.util.concurrent.ExecutionException;
 public class FacebookFragment extends Fragment {
 
     public static final String ARG_MENU_NUMBER = "menu_number";
-    public static final String API_URL = "http://fe-vi.com/api/card?category=";
+    public static final String CARDS_API_URL = "http://fe-vi.com/api/card?category=";
+    public static final String CARD_API_URL = "http://fe-vi.com/api/card?id=";
+    private static final String CHECK_STATS_URL = "http://www.appinkorea.co.kr/fevi/stats.php";
 
     private int currentPage = 0;
     FaAdapter faAdapter;
     String menu_title;
     List<Card> cards = new ArrayList<>();
+    View rootView;
+    private boolean loading = true;
 
     public FacebookFragment() { }
 
@@ -53,45 +61,98 @@ public class FacebookFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public void onResume() {
+        super.onResume();
+        refreshProfile(rootView);
+    }
 
-        View rootView = inflater.inflate(R.layout.fadong_main, container, false);
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        rootView = inflater.inflate(R.layout.fadong_main, container, false);
+
+        refreshProfile(rootView);
 
         int i = getArguments().getInt(ARG_MENU_NUMBER);
         menu_title = getResources().getStringArray(R.array.menu_array)[i];
 
         ListView itemListView = (ListView) rootView.findViewById(R.id.fa_item);
 
-        try {
-            cards = (List<Card>) new ApiCall().execute(menu_title, currentPage).get();
-            faAdapter = new FaAdapter(getActivity(), R.layout.fragment_facebook, cards);
-            itemListView.setAdapter(faAdapter);
-            itemListView.setOnScrollListener(new EndlessScrollListener(5));
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
+        new CallCards().execute(menu_title, currentPage);
+        faAdapter = new FaAdapter(getActivity(), R.layout.fragment_facebook, cards);
+        itemListView.setAdapter(faAdapter);
+        itemListView.setOnScrollListener(new EndlessScrollListener(5));
 
-
+        checkVid();
         return rootView;
     }
 
-    public class ApiCall extends AsyncTask {
+    private void refreshProfile(View rootView) {
+        SharedPreferences preferences = rootView.getContext().getSharedPreferences(getResources().getString(R.string.loginPref), rootView.getContext().MODE_PRIVATE);
+        String id = preferences.getString("id", null);
+        if(id != null) {
+            new CheckProfile(rootView).execute(id);
+        }
+    }
+
+    public class CheckProfile extends AsyncTask <String, Void, String> {
+
+        private View view;
+        private Member member;
+
+        public CheckProfile(View view) {
+            this.view = view;
+            this.member = new Member();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            this.member.setId(params[0]);
+            return new FadongHttpClient().sendLogin(CHECK_STATS_URL, member.getParameter());
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            Uri uri = Uri.parse("?" + result);
+            Integer exp = Integer.valueOf(uri.getQueryParameter("exp"));
+            Integer next_exp = Integer.valueOf(uri.getQueryParameter("next_exp"));
+
+            if(exp.equals(next_exp)) {
+                Activity activity = (Activity) rootView.getContext();
+                Intent intent = new Intent(activity, LevelUpActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                activity.startActivity(intent);
+            }
+
+            TextView barName = (TextView) view.findViewById(R.id.profile_bar_name);
+            barName.setText(member.getId());
+            TextView barRuby = (TextView) view.findViewById(R.id.profile_bar_ruby);
+            barRuby.setText("Lev : " + uri.getQueryParameter("level") + ", Exp : " + uri.getQueryParameter("exp") + " / " + uri.getQueryParameter("next_exp") + ", Ruby : " + uri.getQueryParameter("rubi"));
+        }
+    }
+
+    public class CallCards extends AsyncTask {
 
         @Override
         protected Object doInBackground(Object[] params) {
             String menu = (String) params[0];
             int page = (int) params[1];
-            List<Card> cards = parseToCard(getJsonObject(menu, page));
-            return cards;
+            return parseToCard(getJsonObject(CARDS_API_URL + menu + "&page=" + String.valueOf(page)));
         }
 
-
+        @Override
+        protected void onPostExecute(Object o) {
+            super.onPostExecute(o);
+            List<Card> result = (List<Card>) o;
+            cards.addAll(result);
+            faAdapter.notifyDataSetChanged();
+            loading = true;
+        }
     }
 
-    private JSONObject getJsonObject(String menu, int page) {
-
+    private JSONObject getJsonObject(String url) {
         try {
-            HttpURLConnection connection = (HttpURLConnection) new URL(API_URL + menu + "&page=" + String.valueOf(page)).openConnection();
+            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Content-Type", "application/json");
 
@@ -145,11 +206,11 @@ public class FacebookFragment extends Fragment {
     }
 
 
+
     public class EndlessScrollListener implements AbsListView.OnScrollListener {
 
         private int visibleThreshold = 3;
         private int previousTotal = 0;
-        private boolean loading = true;
 
         public EndlessScrollListener() {
         }
@@ -173,16 +234,50 @@ public class FacebookFragment extends Fragment {
                 }
             }
             if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
+                new CallCards().execute(menu_title, currentPage);
+            }
+        }
+    }
 
-                try {
-                    cards.addAll((List<Card>) new ApiCall().execute(menu_title, currentPage).get());
-                } catch (InterruptedException | ExecutionException e) {
-                    e.printStackTrace();
-                }
+    private void checkVid() {
+        Activity activity = (Activity) rootView.getContext();
+        Intent intent = activity.getIntent();
+        String vid = intent.getStringExtra("vid");
+        if(vid != null && !vid.isEmpty()) {
+            new CallCard().execute(vid);
+        }
+    }
 
-                faAdapter.notifyDataSetChanged();
-                loading = true;
+    public class CallCard extends AsyncTask {
 
+        String vid;
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            vid = (String) params[0];
+            return parseToCard(getJsonObject(CARD_API_URL + vid));
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            super.onPostExecute(o);
+            Activity activity = (Activity) rootView.getContext();
+            List<Card> cardList = (List<Card>) o;
+            if(!cardList.isEmpty()) {
+                Intent movieIntent = new Intent(activity, MovieActivity.class);
+
+                Card card = cardList.get(0);
+                movieIntent.putExtra(ContextString.cardId, card.getId());
+                movieIntent.putExtra(ContextString.cardProfile, card.getProfile_image());
+                movieIntent.putExtra(ContextString.cardName, card.getName());
+                movieIntent.putExtra(ContextString.cardTime, card.getUpdated_time());
+                movieIntent.putExtra(ContextString.cardPicture, card.getPicture());
+                movieIntent.putExtra(ContextString.cardDescription, card.getDescription());
+                movieIntent.putExtra(ContextString.cardSource, card.getSource());
+
+                activity.startActivity(movieIntent);
+            } else {
+                Log.e("fadong", "invalid vid");
             }
         }
     }

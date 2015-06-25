@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#111">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -80,34 +81,39 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="0dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
         android:background="#fff"
+        android:id="@+id/movie_description"
         android:layout_below="@+id/video_layout">
+
+        <WebView
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:id="@+id/webView"
+            android:scrollbars="none"
+
+            android:background="#fff"/>
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="동영상 소개내용들..."
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/webView"
+            android:text="동\n영\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n상 소개내용들..."
             android:id="@+id/fa_description"
             android:layout_margin="10dp"
             android:ellipsize="end"
             android:textColor="#4e4e4e"/>
-
     </RelativeLayout>
-
 
     <ImageView
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:id="@+id/closeButton"
         android:src="@drawable/close"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         />

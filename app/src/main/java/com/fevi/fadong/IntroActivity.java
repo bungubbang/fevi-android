@@ -4,19 +4,14 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.fevi.fadong.domain.Member;
 import com.fevi.fadong.support.LoginCall;
 import com.fevi.fadong.support.MemberInfoFactory;
 import com.google.common.base.Strings;
-
-import java.util.concurrent.ExecutionException;
 
 
 public class IntroActivity extends Activity {
@@ -27,10 +22,14 @@ public class IntroActivity extends Activity {
     private SharedPreferences loginPreferences;
     private ProgressDialog mProgressDialog;
 
+    private String vid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
+
+        vid = getIntent().getStringExtra("vid");
 
         loginPreferences = getSharedPreferences(getResources().getString(R.string.loginPref), MODE_PRIVATE);
         String id = loginPreferences.getString("id", null);
@@ -43,7 +42,7 @@ public class IntroActivity extends Activity {
             member.setId(id);
             member.setPassword(password);
             new MemberInfoFactory(member, this).getInfo();
-            new LoginCall(this, true, member, mProgressDialog).execute();
+            new LoginCall(this, true, member, mProgressDialog).execute(this.vid);
         } else {
             mProgressDialog.dismiss();
             Intent loginIntent = new Intent(this, LoginActivity.class);

@@ -5,6 +5,7 @@ package com.fevi.fadong.support;
  */
 public class ContextString {
 
+    public static String cardId = "cardId";
     public static String cardName = "cardName";
     public static String cardTime = "cardTime";
     public static String cardProfile = "cardProfile";

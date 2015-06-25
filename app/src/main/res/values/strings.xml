@@ -28,5 +28,8 @@
     <string name="title_activity_invite">InviteActivity</string>
     <string name="title_activity_intro">IntroActivity</string>
     <string name="logout">로그아웃</string>
+    <string name="title_activity_level_up">LevelUpActivity</string>
+    <string name="title_activity_video_intent">VideoIntentActivity</string>
+    <string name="title_activity_webview">WebviewActivity</string>
 
 </resources>

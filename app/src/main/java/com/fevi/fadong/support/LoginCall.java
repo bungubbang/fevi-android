@@ -1,11 +1,11 @@
 package com.fevi.fadong.support;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.fevi.fadong.IntroActivity;
 import com.fevi.fadong.InviteActivity;
@@ -25,6 +25,7 @@ public class LoginCall extends AsyncTask <Object, Void, String>{
     private IntroActivity introActivity;
     private ProgressDialog mProgressDialog;
     SharedPreferences loginPreferences;
+    private String vid;
 
 
     public LoginCall(IntroActivity introActivity, boolean isAutoLogin, Member member, ProgressDialog mProgressDialog) {
@@ -38,6 +39,10 @@ public class LoginCall extends AsyncTask <Object, Void, String>{
 
     @Override
     protected String doInBackground(Object... params) {
+        Object param = params[0];
+        if(param != null && !((String) param).isEmpty()) {
+            vid = (String) param;
+        }
         return new FadongHttpClient().sendLogin(LOG_IN_URL, member.getParameter());
     }
 
@@ -50,14 +55,17 @@ public class LoginCall extends AsyncTask <Object, Void, String>{
         switch (uri.getQueryParameter("code")) {
             case "0":
                 Intent loginIntent = new Intent(introActivity, LoginActivity.class);
+                loginIntent.putExtra("vid", vid);
                 introActivity.startActivity(loginIntent);
                 introActivity.finish();
                 break;
             case "1": // 로그인 성공
+                Log.e("fadong", "login OK" + vid);
                 saveLogin(isAutoLogin, member);
 
                 Intent mainIntent = new Intent(introActivity, MainActivity.class);
                 mainIntent.putExtra("member", mappingMemberInfo(member, uri));
+                mainIntent.putExtra("vid", vid);
                 introActivity.startActivity(mainIntent);
                 introActivity.finish();
                 break;

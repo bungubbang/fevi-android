@@ -44,12 +44,34 @@
             android:name=".IntroActivity"
             android:label="@string/title_activity_intro"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".LevelUpActivity"
+            android:label="@string/title_activity_level_up" >
+        </activity>
+        <activity
+            android:name=".VideoIntentActivity"
+            android:label="@string/title_activity_video_intent" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="movie"
+                    android:scheme="fadong" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".WebviewActivity"
+            android:label="@string/title_activity_webview" >
         </activity>
     </application>
 

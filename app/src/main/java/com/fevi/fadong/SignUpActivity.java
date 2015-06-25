@@ -16,13 +16,6 @@ import com.fevi.fadong.domain.Member;
 import com.fevi.fadong.support.FadongHttpClient;
 import com.fevi.fadong.support.MemberInfoFactory;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.concurrent.ExecutionException;
 
 

@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import com.fevi.fadong.LoginActivity;
 import com.fevi.fadong.R;
-import com.fevi.fadong.domain.Member;
 
 /**
  * Created by 1000742 on 15. 3. 2..
@@ -30,7 +29,8 @@ public class AddExperienceCall extends AsyncTask<Object, Void, String> {
     protected String doInBackground(Object... params) {
         String id = loginPreferences.getString("id", null);
         String password = loginPreferences.getString("password", null);
-        return new FadongHttpClient().sendLogin(EXP_UP_URL, "id=" + id + "&password=" + password);
+        String videoId = (String) params[0];
+        return new FadongHttpClient().sendLogin(EXP_UP_URL, "id=" + id + "&password=" + password + "&vid=" + videoId);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class AddExperienceCall extends AsyncTask<Object, Void, String> {
             context.startActivity(loginIntent);
             return;
         }
-
+        Log.e("fadong", "exp up " + result);
         switch (uri.getQueryParameter("exp_code")) {
             case "0": // 경험치가 최대 경험치
                 Toast.makeText(context, "최대 경험치에 도달하였습니다. 레벨업이 필요합니다.", Toast.LENGTH_LONG).show();

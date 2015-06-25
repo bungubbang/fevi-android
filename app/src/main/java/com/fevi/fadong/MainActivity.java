@@ -1,17 +1,9 @@
 package com.fevi.fadong;
 
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.graphics.Color;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -19,9 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,14 +20,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.fevi.fadong.adapter.dto.MenuList;
 import com.fevi.fadong.adapter.MenuListAdapter;
+import com.fevi.fadong.adapter.dto.MenuList;
 import com.fevi.fadong.domain.Member;
 import com.fevi.fadong.support.MemberService;
-import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
-import java.io.Serializable;
 import java.util.List;
 
 public class MainActivity extends ActionBarActivity {
@@ -205,7 +193,6 @@ public class MainActivity extends ActionBarActivity {
             this.startActivity(loginIntent);
             this.finish();
         }
-        Log.e("fadong", "second : " + member );
         TextView leftName = (TextView) findViewById(R.id.left_name);
         leftName.setText(member.getId());
     }

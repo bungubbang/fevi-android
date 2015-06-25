@@ -2,7 +2,6 @@ package com.fevi.fadong.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,6 +90,7 @@ public class FaAdapter extends ArrayAdapter<Card> {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(v.getContext(), MovieActivity.class);
+            intent.putExtra(ContextString.cardId, card.getId());
             intent.putExtra(ContextString.cardProfile, card.getProfile_image());
             intent.putExtra(ContextString.cardName, card.getName());
             intent.putExtra(ContextString.cardTime, card.getUpdated_time());

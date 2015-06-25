@@ -1,22 +1,41 @@
 package com.fevi.fadong;
 
-import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.ActionBarActivity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebView;
 
+import com.fevi.fadong.domain.Member;
 import com.fevi.fadong.support.MemberService;
+import com.fevi.fadong.support.WebViewSetting;
 
 
 public class InviteActivity extends ActionBarActivity {
 
+    private SharedPreferences loginPreferences;
+    private WebView webView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("친구초대");
         setContentView(R.layout.activity_invite);
-    }
 
+        loginPreferences = getSharedPreferences(getResources().getString(R.string.loginPref), MODE_PRIVATE);
+
+        Intent intent = getIntent();
+        Member member = (Member) intent.getSerializableExtra("member");
+
+        webView = (WebView) findViewById(R.id.invite_webView);
+        WebViewSetting.appin(this, webView);
+
+        webView.loadUrl("http://www.appinkorea.co.kr/fevi/invite.php?id=" + member.getId() + "&password=" + member.getPassword());
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -27,12 +46,10 @@ public class InviteActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        Log.e("fadong", String.valueOf(id));
+        // Pass the event to ActionBarDrawerToggle, if it returns
+        // true, then it has handled the app icon touch event
 
+        // Handle your other action bar items...
         switch (item.getItemId()) {
             case R.id.fadong_logout:
                 MemberService.logout(this);
@@ -41,5 +58,27 @@ public class InviteActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void logout() {
+        SharedPreferences.Editor loginPreEdit = loginPreferences.edit();
+        loginPreEdit.putString("id", "");
+        loginPreEdit.putString("password", "");
+        loginPreEdit.putBoolean("isAutoLogin", false);
+
+        loginPreEdit.apply();
+
+        Intent loginIntent = new Intent(this, LoginActivity.class);
+        this.startActivity(loginIntent);
+        this.finish();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK) && webView.canGoBack()) {
+            webView.goBack();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

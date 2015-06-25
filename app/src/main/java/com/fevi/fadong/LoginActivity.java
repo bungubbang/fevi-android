@@ -7,9 +7,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -18,18 +15,7 @@ import android.widget.Toast;
 
 import com.fevi.fadong.domain.Member;
 import com.fevi.fadong.support.FadongHttpClient;
-import com.fevi.fadong.support.LoginCall;
 import com.fevi.fadong.support.MemberInfoFactory;
-import com.google.common.base.Strings;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.concurrent.ExecutionException;
 
 
 public class LoginActivity extends Activity {
@@ -38,10 +24,14 @@ public class LoginActivity extends Activity {
 
     SharedPreferences loginPreferences;
 
+    private String vid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        vid = getIntent().getStringExtra("vid");
 
         loginPreferences = getSharedPreferences(getResources().getString(R.string.loginPref), MODE_PRIVATE);
         String id = loginPreferences.getString("id", null);
@@ -125,6 +115,7 @@ public class LoginActivity extends Activity {
 
                     Intent mainIntent = new Intent(loginActivity, MainActivity.class);
                     mainIntent.putExtra("member", mappingMemberInfo(member, uri));
+                    mainIntent.putExtra("vid", vid);
                     loginActivity.startActivity(mainIntent);
                     loginActivity.finish();
                     break;

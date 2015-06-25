@@ -2,14 +2,18 @@ package com.fevi.fadong;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.ProgressBar;
@@ -19,23 +23,32 @@ import android.widget.VideoView;
 import com.fevi.fadong.support.AddExperienceCall;
 import com.fevi.fadong.support.CircleTransform;
 import com.fevi.fadong.support.ContextString;
+import com.fevi.fadong.support.WebViewSetting;
 import com.squareup.picasso.Picasso;
+
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class MovieActivity extends Activity {
+
+    private static final String WATCH_MOVIE_IDS = "WATCH_MOVIE_IDS";
+
+    SharedPreferences preferences;
+    private String cardId;
+
+    private WebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        WindowManager.LayoutParams lpWindow = new WindowManager.LayoutParams();
-        lpWindow.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-        lpWindow.dimAmount = 0.7f;
-        getWindow().setAttributes(lpWindow);
+        preferences = getSharedPreferences(getResources().getString(R.string.loginPref), MODE_PRIVATE);
 
         setContentView(R.layout.activity_movie);
 
         Intent intent = getIntent();
+        cardId = intent.getStringExtra(ContextString.cardId);
         String cardName = intent.getStringExtra(ContextString.cardName);
         String cardTime = intent.getStringExtra(ContextString.cardTime);
         String cardProfile = intent.getStringExtra(ContextString.cardProfile);
@@ -49,6 +62,7 @@ public class MovieActivity extends Activity {
         TextView time = (TextView) findViewById(R.id.fa_time);
         time.setText(cardTime);
         TextView description = (TextView) findViewById(R.id.fa_description);
+        description.setMovementMethod(new ScrollingMovementMethod());
         description.setText(cardDescription);
 
         ImageView profile = (ImageView) findViewById(R.id.fa_profile);
@@ -98,7 +112,28 @@ public class MovieActivity extends Activity {
             }
         });
 
-        new AddExperienceCall(this).execute();
+        Set<String> watching = preferences.getStringSet(WATCH_MOVIE_IDS, new HashSet<String>());
+        if(!watching.contains(cardId)) {
+            new AddExperienceCall(this).execute(cardId);
+            SharedPreferences.Editor edit = preferences.edit();
+            watching.add(cardId);
+            edit.putStringSet(WATCH_MOVIE_IDS, watching);
+            edit.apply();
+        }
+
+        String memberId = preferences.getString("id", null);
+
+        webView = (WebView) findViewById(R.id.webView);
+        WebViewSetting.appin(this, webView);
+        webView.loadUrl("http://www.appinkorea.co.kr/fevi/share.php?id=" + memberId + "&vid=" + cardId);
+        webView.setHorizontalScrollBarEnabled(false);
+        webView.setVerticalScrollBarEnabled(false);
+        webView.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                return (event.getAction() == MotionEvent.ACTION_MOVE);
+            }
+        });
+
 
     }
 
@@ -123,5 +158,14 @@ public class MovieActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK) && webView.canGoBack()) {
+            webView.goBack();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
