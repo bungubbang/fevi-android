@@ -64,6 +64,7 @@ public class SignUpActivity extends Activity {
                             Toast.makeText(v.getContext(), "회원가입이 완료 되었습니다.", Toast.LENGTH_SHORT).show();
                             Intent loginIntent = new Intent(v.getContext(), LoginActivity.class);
                             v.getContext().startActivity(loginIntent);
+                            finish();
                         }
                     } catch (InterruptedException | ExecutionException e) {
                         e.printStackTrace();

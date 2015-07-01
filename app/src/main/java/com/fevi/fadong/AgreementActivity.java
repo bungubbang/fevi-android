@@ -42,28 +42,30 @@ public class AgreementActivity extends Activity {
             }
         });
 
-        CheckBox checkAllCheckBox = (CheckBox) findViewById(R.id.agree_all_check);
-        checkAllCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                agreeUserCheckBox.setChecked(isChecked);
-                agreeInfoCheckBox.setChecked(isChecked);
-                agreeBenefitCheckBox.setChecked(isChecked);
-            }
-        });
-
-
         Button signUpButton = (Button) findViewById(R.id.signup);
         signUpButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                        if (agreeUserCheckBox.isChecked() && agreeInfoCheckBox.isChecked()) {
+                                Intent intent = new Intent(v.getContext(), SignUpActivity.class);
+                                intent.putExtra("pushAgree", pushAgree);
+                                v.getContext().startActivity(intent);
+                        } else {
+                                Toast.makeText(getApplicationContext(), "약관 동의를 하셔야 회원가입을 하실수 있습니다.", Toast.LENGTH_SHORT).show();
+                        }
+                }
+        });
+
+        Button signUpAgreeButton = (Button) findViewById(R.id.signup_agree);
+        signUpAgreeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(agreeUserCheckBox.isChecked() && agreeInfoCheckBox.isChecked()) {
+                    agreeUserCheckBox.setChecked(true);
+                    agreeInfoCheckBox.setChecked(true);
+                    agreeBenefitCheckBox.setChecked(true);
                     Intent intent = new Intent(v.getContext(), SignUpActivity.class);
-                    intent.putExtra("pushAgree", pushAgree);
+                    intent.putExtra("pushAgree", true);
                     v.getContext().startActivity(intent);
-                } else {
-                    Toast.makeText(getApplicationContext(), "약관 동의를 하셔야 회원가입을 하실수 있습니다.", Toast.LENGTH_SHORT).show();
-                }
             }
         });
     }

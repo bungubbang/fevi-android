@@ -13,7 +13,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
-import com.fevi.fadong.LevelUpActivity;
+import com.fevi.fadong.IntroActivity;
 
 import java.io.File;
 
@@ -95,6 +95,8 @@ public class WebViewSetting {
 
         @JavascriptInterface
         public void closeWebview() {
+            Intent intent = new Intent(activity, IntroActivity.class);
+            activity.startActivity(intent);
             activity.finish();
         }
 

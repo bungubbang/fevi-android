@@ -60,7 +60,6 @@ public class LoginCall extends AsyncTask <Object, Void, String>{
                 introActivity.finish();
                 break;
             case "1": // 로그인 성공
-                Log.e("fadong", "login OK" + vid);
                 saveLogin(isAutoLogin, member);
 
                 Intent mainIntent = new Intent(introActivity, MainActivity.class);

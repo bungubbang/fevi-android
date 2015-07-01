@@ -44,7 +44,7 @@
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Auto Login"
+            android:text="자동 로그인"
             android:id="@+id/fa_auto_field"
             android:layout_gravity="right"
             android:checked="true"
@@ -54,7 +54,7 @@
         <Button
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="LOGIN"
+            android:text="로그인"
             android:textSize="10sp"
             android:id="@+id/fa_login_button"
             android:layout_below="@+id/fa_fill"
@@ -65,7 +65,7 @@
         <Button
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="SIGN UP"
+            android:text="회원가입"
             android:textSize="10sp"
             android:id="@+id/fa_signup_button"
             android:layout_alignBottom="@+id/fa_fill"

@@ -1,9 +1,9 @@
 package com.fevi.fadong;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,7 +14,7 @@ import com.fevi.fadong.support.MemberService;
 import com.fevi.fadong.support.WebViewSetting;
 
 
-public class InviteActivity extends ActionBarActivity {
+public class InviteActivity extends Activity {
 
     private SharedPreferences loginPreferences;
     private WebView webView;
@@ -34,7 +34,6 @@ public class InviteActivity extends ActionBarActivity {
         WebViewSetting.appin(this, webView);
 
         webView.loadUrl("http://www.appinkorea.co.kr/fevi/invite.php?id=" + member.getId() + "&password=" + member.getPassword());
-
     }
 
     @Override
@@ -58,19 +57,6 @@ public class InviteActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void logout() {
-        SharedPreferences.Editor loginPreEdit = loginPreferences.edit();
-        loginPreEdit.putString("id", "");
-        loginPreEdit.putString("password", "");
-        loginPreEdit.putBoolean("isAutoLogin", false);
-
-        loginPreEdit.apply();
-
-        Intent loginIntent = new Intent(this, LoginActivity.class);
-        this.startActivity(loginIntent);
-        this.finish();
     }
 
     @Override

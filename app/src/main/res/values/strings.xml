@@ -31,5 +31,6 @@
     <string name="title_activity_level_up">LevelUpActivity</string>
     <string name="title_activity_video_intent">VideoIntentActivity</string>
     <string name="title_activity_webview">WebviewActivity</string>
+    <string name="title_activity_vid_intent">VidIntentActivity</string>
 
 </resources>

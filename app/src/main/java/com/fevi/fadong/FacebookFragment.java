@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fevi.fadong.adapter.FaAdapter;
 import com.fevi.fadong.adapter.dto.Card;
@@ -67,13 +69,60 @@ public class FacebookFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fadong_main, container, false);
 
         refreshProfile(rootView);
 
+        SharedPreferences preferences = rootView.getContext().getSharedPreferences(getResources().getString(R.string.loginPref), rootView.getContext().MODE_PRIVATE);
+        final String id = preferences.getString("id", null);
+        final String password = preferences.getString("password", null);
+
+        final Activity activity = (Activity) rootView.getContext();
+
         int i = getArguments().getInt(ARG_MENU_NUMBER);
         menu_title = getResources().getStringArray(R.array.menu_array)[i];
+
+        CardView noticeButton = (CardView) rootView.findViewById(R.id.notice);
+        noticeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(rootView.getContext(), WebviewActivity.class);
+                intent.putExtra("url", "http://www.appinkorea.co.kr/fevi/notice.php?id=" + id + "&password=" + password);
+                activity.startActivity(intent);
+            }
+        });
+
+        CardView eventButton = (CardView) rootView.findViewById(R.id.event);
+        eventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(rootView.getContext(), WebviewActivity.class);
+                intent.putExtra("url", "http://www.appinkorea.co.kr/fevi/event.php?id=" + id + "&password=" + password);
+                activity.startActivity(intent);
+            }
+        });
+
+        CardView rubyButton = (CardView) rootView.findViewById(R.id.ruby);
+        rubyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(rootView.getContext(), WebviewActivity.class);
+                intent.putExtra("url", "http://www.appinkorea.co.kr/fevi/rubi.php?id=" + id + "&password=" + password);
+                activity.startActivity(intent);
+            }
+        });
+
+        CardView munsangButton = (CardView) rootView.findViewById(R.id.munsang);
+        munsangButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(rootView.getContext(), WebviewActivity.class);
+                intent.putExtra("url", "http://www.appinkorea.co.kr/fevi/ms.php?id=" + id + "&password=" + password);
+                activity.startActivity(intent);
+            }
+        });
+
 
         ListView itemListView = (ListView) rootView.findViewById(R.id.fa_item);
 

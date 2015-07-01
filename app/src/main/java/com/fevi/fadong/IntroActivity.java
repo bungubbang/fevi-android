@@ -12,6 +12,8 @@ import com.fevi.fadong.domain.Member;
 import com.fevi.fadong.support.LoginCall;
 import com.fevi.fadong.support.MemberInfoFactory;
 import com.google.common.base.Strings;
+import com.parse.Parse;
+import com.parse.ParseInstallation;
 
 
 public class IntroActivity extends Activity {
@@ -28,6 +30,8 @@ public class IntroActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
+
+        parseInit();
 
         vid = getIntent().getStringExtra("vid");
 
@@ -76,5 +80,10 @@ public class IntroActivity extends Activity {
 
     public void finishActivity() {
         this.finish();
+    }
+
+    private void parseInit() {
+        Parse.initialize(this, "2iC7nc2t8jrm8DFPtV03BT1TiXODEkNy6cUomq95", "N8HSWDLfQqDKQ1d5okDbYuIHJtgg7yjugSdffDo1");
+        ParseInstallation.getCurrentInstallation().saveInBackground();
     }
 }

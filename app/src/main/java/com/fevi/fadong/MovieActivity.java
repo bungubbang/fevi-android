@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.method.ScrollingMovementMethod;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -24,6 +25,7 @@ import com.fevi.fadong.support.AddExperienceCall;
 import com.fevi.fadong.support.CircleTransform;
 import com.fevi.fadong.support.ContextString;
 import com.fevi.fadong.support.WebViewSetting;
+import com.fevi.fadong.support.db.WatchVidService;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashSet;
@@ -112,16 +114,21 @@ public class MovieActivity extends Activity {
             }
         });
 
-        Set<String> watching = preferences.getStringSet(WATCH_MOVIE_IDS, new HashSet<String>());
-        if(!watching.contains(cardId)) {
-            new AddExperienceCall(this).execute(cardId);
-            SharedPreferences.Editor edit = preferences.edit();
-            watching.add(cardId);
-            edit.putStringSet(WATCH_MOVIE_IDS, watching);
-            edit.apply();
-        }
+        final String memberId = preferences.getString("id", null);
 
-        String memberId = preferences.getString("id", null);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                WatchVidService watchVidService = new WatchVidService(getApplicationContext());
+
+                if(!watchVidService.exist(memberId, cardId)) {
+                    new AddExperienceCall(getApplicationContext()).execute(cardId);
+                    watchVidService.insert(memberId, cardId);
+                }
+            }
+        }, 5000);
+
+
 
         webView = (WebView) findViewById(R.id.webView);
         WebViewSetting.appin(this, webView);

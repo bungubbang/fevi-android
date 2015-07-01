@@ -47,8 +47,6 @@ public class MainActivity extends ActionBarActivity {
 
         loginPreferences = getSharedPreferences(getResources().getString(R.string.loginPref), MODE_PRIVATE);
         checkLogin();
-        Log.e("fadong", member.toString());
-
         mTitle = "Fadong";
 
         String[] menus = getResources().getStringArray(R.array.menu_array);
