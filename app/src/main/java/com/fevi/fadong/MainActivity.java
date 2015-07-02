@@ -191,7 +191,5 @@ public class MainActivity extends ActionBarActivity {
             this.startActivity(loginIntent);
             this.finish();
         }
-        TextView leftName = (TextView) findViewById(R.id.left_name);
-        leftName.setText(member.getId());
     }
 }

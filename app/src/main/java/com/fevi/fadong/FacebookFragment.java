@@ -41,8 +41,8 @@ import java.util.List;
 public class FacebookFragment extends Fragment {
 
     public static final String ARG_MENU_NUMBER = "menu_number";
-    public static final String CARDS_API_URL = "http://fe-vi.com/api/card?category=";
-    public static final String CARD_API_URL = "http://fe-vi.com/api/card?id=";
+    public static final String CARDS_API_URL = "http://munsangdong.cafe24.com/api/card?category=";
+    public static final String CARD_API_URL = "http://munsangdong.cafe24.com/api/card?id=";
     private static final String CHECK_STATS_URL = "http://www.appinkorea.co.kr/fevi/stats.php";
 
     private int currentPage = 0;

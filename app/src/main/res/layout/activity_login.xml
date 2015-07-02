@@ -5,7 +5,6 @@
     android:background="@drawable/blurred_background"
     tools:context="com.fevi.fadong.LoginActivity">
 
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
@@ -16,15 +15,12 @@
         android:id="@+id/fa_fill">
 
 
-        <TextView
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Fadong"
-            android:textColor="#eee"
-            android:typeface="serif"
-            android:textSize="50sp"
-            android:layout_gravity="center"
-            android:focusableInTouchMode="true" />
+            android:id="@+id/mundong"
+            android:src="@drawable/mundong"
+            android:layout_gravity="center_horizontal" />
 
         <EditText
             android:layout_width="300dp"

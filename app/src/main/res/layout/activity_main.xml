@@ -17,45 +17,58 @@
         android:layout_width="240dp"
         android:layout_height="match_parent"
         android:id="@+id/left_drawer"
-        android:layout_gravity="start">
-
+        android:layout_gravity="start"
+        android:background="#fff">
 
         <RelativeLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="180dp">
-
+            android:layout_height="100dp"
+            android:background="@drawable/blurred_background">
             <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/menu_default_wall"
-                android:id="@+id/menuwall"
-                android:scaleType="fitXY"/>
-
-            <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="FADONG"
-                android:textColor="#F3FFE2"
-                android:textSize="40sp"
-                android:layout_marginBottom="20dp"
-                android:id="@+id/fadong"
-                android:layout_above="@+id/left_name"
-                android:layout_alignLeft="@+id/left_name"
-                android:layout_alignStart="@+id/left_name" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="sungyong.jung@sk.com"
-                android:textColor="#F3FFE2"
-                android:textSize="13sp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginBottom="10dp"
-                android:layout_alignParentBottom="true"
-                android:id="@+id/left_name"/>
-
+                android:id="@+id/mundong"
+                android:src="@drawable/mundong"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="15dp"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"/>
         </RelativeLayout>
+
+        <!--<RelativeLayout-->
+            <!--android:orientation="vertical"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="180dp">-->
+
+            <!--<ImageView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:src="@drawable/menu_default_wall"-->
+                <!--android:id="@+id/menuwall"-->
+                <!--android:scaleType="fitXY"/>-->
+
+            <!--<ImageView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="20dp"-->
+                <!--android:src="@drawable/mundong"-->
+                <!--android:id="@+id/fadong"-->
+                <!--android:layout_above="@+id/left_name"-->
+                <!--android:layout_alignLeft="@+id/left_name"-->
+                <!--android:layout_alignStart="@+id/left_name" />-->
+
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="sungyong.jung@sk.com"-->
+                <!--android:textColor="#F3FFE2"-->
+                <!--android:textSize="13sp"-->
+                <!--android:layout_marginLeft="20dp"-->
+                <!--android:layout_marginBottom="10dp"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--android:id="@+id/left_name"/>-->
+
+        <!--</RelativeLayout>-->
 
         <ListView android:id="@+id/left_drawer_list"
             android:layout_width="match_parent"
