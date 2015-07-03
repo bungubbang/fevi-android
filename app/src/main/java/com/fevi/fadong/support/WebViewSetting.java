@@ -14,6 +14,8 @@ import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import com.fevi.fadong.IntroActivity;
+import com.fevi.fadong.LoginActivity;
+import com.nextapps.naswall.NASWall;
 
 import java.io.File;
 
@@ -65,13 +67,7 @@ public class WebViewSetting {
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     activity.startActivity(intent);
                 } catch (Exception e) {
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast toast = Toast.makeText(activity, "해당 앱을 띄울 수 없습니다.", Toast.LENGTH_LONG);
-                            toast.show();
-                        }
-                    });
+                    e.printStackTrace();
                 }
 
             }
@@ -110,6 +106,17 @@ public class WebViewSetting {
                     //m_vibrator.vibrate(50);
                 }
             });
+        }
+
+        @JavascriptInterface
+        public void logout() {
+            MemberService.logout(activity);
+            activity.finish();
+        }
+
+        @JavascriptInterface
+        public void naswallOpen(String id) {
+            NASWall.open(activity, id);
         }
     }
 }

@@ -12,6 +12,7 @@ import com.fevi.fadong.domain.Member;
 import com.fevi.fadong.support.LoginCall;
 import com.fevi.fadong.support.MemberInfoFactory;
 import com.google.common.base.Strings;
+import com.nextapps.naswall.NASWall;
 import com.parse.Parse;
 import com.parse.ParseInstallation;
 
@@ -32,6 +33,8 @@ public class IntroActivity extends Activity {
         setContentView(R.layout.activity_intro);
 
         parseInit();
+
+        NASWall.init(this, false);
 
         vid = getIntent().getStringExtra("vid");
 
