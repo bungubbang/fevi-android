@@ -3,6 +3,9 @@ package com.fevi.fadong.support;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -16,8 +19,11 @@ import android.widget.Toast;
 import com.fevi.fadong.IntroActivity;
 import com.fevi.fadong.LoginActivity;
 import com.nextapps.naswall.NASWall;
+import com.tnkfactory.ad.TnkSession;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 /**
  * Created by 1000742 on 15. 6. 25..
@@ -117,6 +123,40 @@ public class WebViewSetting {
         @JavascriptInterface
         public void naswallOpen(String id) {
             NASWall.open(activity, id);
+        }
+
+        @JavascriptInterface
+        public void calltnk(String id) {
+            TnkSession.setUserName(activity, id);
+            TnkSession.showAdList(activity, "무료 루비 받기");
+        }
+
+        @JavascriptInterface
+        public void shareFacebook(String url, String image, String text) {
+            String urlToShare = url;
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TEXT, urlToShare);
+            intent.putExtra(Intent.EXTRA_TITLE, text);
+
+            // See if official Facebook app is found
+            boolean facebookAppFound = false;
+            List<ResolveInfo> matches = activity.getPackageManager().queryIntentActivities(intent, 0);
+            for (ResolveInfo info : matches) {
+                if (info.activityInfo.packageName.toLowerCase().startsWith("com.facebook.katana")) {
+                    intent.setPackage(info.activityInfo.packageName);
+                    facebookAppFound = true;
+                    break;
+                }
+            }
+
+            // As fallback, launch sharer.php in a browser
+            if (!facebookAppFound) {
+                String sharerUrl = "https://www.facebook.com/sharer/sharer.php?u=" + urlToShare;
+                intent = new Intent(Intent.ACTION_VIEW, Uri.parse(sharerUrl));
+            }
+
+            activity.startActivity(intent);
         }
     }
 }

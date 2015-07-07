@@ -150,6 +150,17 @@
         <activity android:name="com.tnkfactory.ad.AdMediaActivity" android:screenOrientation="landscape"/>
 
         <meta-data android:name="tnkad_app_id" android:value="10802000-30c1-245e-e542-1c020d0d0f08" />
+
+        <!-- Facebook SDK -->
+        <activity android:name="com.facebook.FacebookActivity"
+            android:configChanges=
+                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:label="@string/app_name" />
+
+        <provider android:authorities="com.facebook.app.FacebookContentProvider403677719733998"
+            android:name="com.facebook.FacebookContentProvider"
+            android:exported="true"/>
     </application>
 
 </manifest>

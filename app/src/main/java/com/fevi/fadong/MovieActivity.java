@@ -40,6 +40,7 @@ public class MovieActivity extends Activity {
     private String cardId;
 
     private WebView webView;
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,12 +117,13 @@ public class MovieActivity extends Activity {
 
         final String memberId = preferences.getString("id", null);
 
-        new Handler().postDelayed(new Runnable() {
+        handler = new Handler();
+        handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 WatchVidService watchVidService = new WatchVidService(getApplicationContext());
 
-                if(!watchVidService.exist(memberId, cardId)) {
+                if (!watchVidService.exist(memberId, cardId)) {
                     new AddExperienceCall(getApplicationContext()).execute(cardId);
                     watchVidService.insert(memberId, cardId);
                 }
@@ -174,5 +176,17 @@ public class MovieActivity extends Activity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onStop() {
+        handler.removeMessages(0);
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        handler.removeMessages(0);
+        super.onDestroy();
     }
 }
