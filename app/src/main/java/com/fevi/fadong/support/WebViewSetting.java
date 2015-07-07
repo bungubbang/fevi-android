@@ -1,11 +1,7 @@
 package com.fevi.fadong.support;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -16,14 +12,16 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
+import com.fevi.fadong.App;
 import com.fevi.fadong.IntroActivity;
-import com.fevi.fadong.LoginActivity;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.nextapps.naswall.NASWall;
 import com.tnkfactory.ad.TnkSession;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.List;
 
 /**
  * Created by 1000742 on 15. 6. 25..
@@ -97,6 +95,16 @@ public class WebViewSetting {
 
         @JavascriptInterface
         public void closeWebview() {
+
+            App application = (App) activity.getApplication();
+            Tracker tracker = application.getDefaultTracker();
+
+            tracker.setScreenName("Webview close");
+            tracker.send(new HitBuilders.EventBuilder()
+                    .setCategory("WEBVIEW")
+                    .setAction("close")
+                    .build());
+
             Intent intent = new Intent(activity, IntroActivity.class);
             activity.startActivity(intent);
             activity.finish();
@@ -116,47 +124,79 @@ public class WebViewSetting {
 
         @JavascriptInterface
         public void logout() {
+            App application = (App) activity.getApplication();
+            Tracker tracker = application.getDefaultTracker();
+
+            tracker.setScreenName("Webview logout button");
+            tracker.send(new HitBuilders.EventBuilder()
+                    .setCategory("WEBVIEW")
+                    .setAction("logout")
+                    .build());
+
             MemberService.logout(activity);
             activity.finish();
         }
 
         @JavascriptInterface
         public void naswallOpen(String id) {
+            App application = (App) activity.getApplication();
+            Tracker tracker = application.getDefaultTracker();
+
+            tracker.setScreenName("Webview naswall");
+            tracker.send(new HitBuilders.EventBuilder()
+                    .setCategory("NASWALL")
+                    .setAction("click")
+                    .setLabel(id)
+                    .build());
+
             NASWall.open(activity, id);
         }
 
         @JavascriptInterface
         public void calltnk(String id) {
+            App application = (App) activity.getApplication();
+            Tracker tracker = application.getDefaultTracker();
+
+            tracker.setScreenName("Webview tnk");
+            tracker.send(new HitBuilders.EventBuilder()
+                    .setCategory("TNK")
+                    .setAction("click")
+                    .setLabel(id)
+                    .build());
+
             TnkSession.setUserName(activity, id);
             TnkSession.showAdList(activity, "무료 루비 받기");
         }
 
         @JavascriptInterface
         public void shareFacebook(String url, String image, String text) {
-            String urlToShare = url;
-            Intent intent = new Intent(Intent.ACTION_SEND);
-            intent.setType("text/plain");
-            intent.putExtra(Intent.EXTRA_TEXT, urlToShare);
-            intent.putExtra(Intent.EXTRA_TITLE, text);
 
-            // See if official Facebook app is found
-            boolean facebookAppFound = false;
-            List<ResolveInfo> matches = activity.getPackageManager().queryIntentActivities(intent, 0);
-            for (ResolveInfo info : matches) {
-                if (info.activityInfo.packageName.toLowerCase().startsWith("com.facebook.katana")) {
-                    intent.setPackage(info.activityInfo.packageName);
-                    facebookAppFound = true;
-                    break;
-                }
+            App application = (App) activity.getApplication();
+            Tracker tracker = application.getDefaultTracker();
+
+            tracker.setScreenName("Share Webview");
+            tracker.send(new HitBuilders.EventBuilder()
+                    .setAction("Action")
+                    .setAction("share")
+                    .setLabel(url)
+                    .build());
+
+            ShareLinkContent content = new ShareLinkContent.Builder()
+                    .setContentUrl(Uri.parse(url))
+                    .setImageUrl(Uri.parse(image))
+                    .setContentTitle("문상주는 동영상")
+                    .setContentDescription(text)
+                    .build();
+
+            if (ShareDialog.canShow(ShareLinkContent.class)) {
+                ShareDialog.show(activity, content);
+            } else {
+                String sharerUrl = "https://www.facebook.com/sharer/sharer.php?u=" + url;
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(sharerUrl));
+                activity.startActivity(intent);
             }
 
-            // As fallback, launch sharer.php in a browser
-            if (!facebookAppFound) {
-                String sharerUrl = "https://www.facebook.com/sharer/sharer.php?u=" + urlToShare;
-                intent = new Intent(Intent.ACTION_VIEW, Uri.parse(sharerUrl));
-            }
-
-            activity.startActivity(intent);
+//            shareDialog.show(activity, content);
         }
     }
 }

@@ -34,4 +34,5 @@
     <string name="title_activity_vid_intent">VidIntentActivity</string>
 
     <string name="NAS_WALL_APP_KEY">nas_ee7c4da7d1b5beb9152f5c107b6d5a3c</string>
+    <string name="facebook_app_id">403677719733998</string>
 </resources>

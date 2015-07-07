@@ -23,6 +23,12 @@ import com.fevi.fadong.adapter.dto.Card;
 import com.fevi.fadong.domain.Member;
 import com.fevi.fadong.support.ContextString;
 import com.fevi.fadong.support.FadongHttpClient;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+import com.google.common.collect.Lists;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,6 +40,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by 1000742 on 15. 1. 5..
@@ -123,23 +133,39 @@ public class FacebookFragment extends Fragment {
             }
         });
 
-
         ListView itemListView = (ListView) rootView.findViewById(R.id.fa_item);
 
-        new CallCards().execute(menu_title, currentPage);
-        faAdapter = new FaAdapter(getActivity(), R.layout.fragment_facebook, cards);
+        faAdapter = new FaAdapter(getActivity(), R.layout.fragment_facebook, this.cards);
         itemListView.setAdapter(faAdapter);
         itemListView.setOnScrollListener(new EndlessScrollListener(5));
 
+        String cacheKey = menu_title + "-" + String.valueOf(currentPage);
+        List<Card> loadCacheCard = loadCacheCard(cacheKey);
+        cards.addAll(loadCacheCard);
+        faAdapter.notifyDataSetChanged();
+
         checkVid();
+
+
+        App application = (App)((Activity) rootView.getContext()).getApplication();
+        Tracker tracker = application.getDefaultTracker();
+
+        tracker.setScreenName(menu_title);
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Fragment")
+                .setAction("show")
+                .build());
+
+
         return rootView;
     }
 
     private void refreshProfile(View rootView) {
         SharedPreferences preferences = rootView.getContext().getSharedPreferences(getResources().getString(R.string.loginPref), rootView.getContext().MODE_PRIVATE);
         String id = preferences.getString("id", null);
+        String password = preferences.getString("password", "");
         if(id != null) {
-            new CheckProfile(rootView).execute(id);
+            new CheckProfile(rootView).execute(id, password);
         }
     }
 
@@ -156,20 +182,24 @@ public class FacebookFragment extends Fragment {
         @Override
         protected String doInBackground(String... params) {
             this.member.setId(params[0]);
+            this.member.setPassword(params[1]);
             return new FadongHttpClient().sendLogin(CHECK_STATS_URL, member.getParameter());
         }
 
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            if(result.isEmpty()) {
+                return;
+            }
             Uri uri = Uri.parse("?" + result);
             Integer exp = Integer.valueOf(uri.getQueryParameter("exp"));
             Integer next_exp = Integer.valueOf(uri.getQueryParameter("next_exp"));
 
             if(exp.equals(next_exp)) {
                 Activity activity = (Activity) rootView.getContext();
-                Intent intent = new Intent(activity, LevelUpActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                Intent intent = new Intent(activity, WebviewActivity.class);
+                intent.putExtra("url", "http://appinkorea.co.kr/fevi/level_up.php?id=" + member.getId() + "&password=" + member.getPassword());
                 activity.startActivity(intent);
             }
 
@@ -180,23 +210,22 @@ public class FacebookFragment extends Fragment {
         }
     }
 
-    public class CallCards extends AsyncTask {
+    public class CallCards extends AsyncTask<String, Void, List<Card>> {
 
         @Override
-        protected Object doInBackground(Object[] params) {
-            String menu = (String) params[0];
-            int page = (int) params[1];
-            return parseToCard(getJsonObject(CARDS_API_URL + menu + "&page=" + String.valueOf(page)));
-        }
+        protected void onPostExecute(List<Card> cards) {
+            super.onPostExecute(cards);
 
-        @Override
-        protected void onPostExecute(Object o) {
-            super.onPostExecute(o);
-            List<Card> result = (List<Card>) o;
-            cards.addAll(result);
-            faAdapter.notifyDataSetChanged();
             loading = true;
         }
+
+        @Override
+        protected List<Card> doInBackground(String... param) {
+            Log.d("mundong", "call api : " + CARDS_API_URL + param[0] + "&page=" + param[1]);
+            List<Card> cards = parseToCard(getJsonObject(CARDS_API_URL + param[0] + "&page=" + param[1]));
+            return cards;
+        }
+
     }
 
     private JSONObject getJsonObject(String url) {
@@ -283,7 +312,9 @@ public class FacebookFragment extends Fragment {
                 }
             }
             if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
-                new CallCards().execute(menu_title, currentPage);
+                List<Card> loadCacheCard = loadCacheCard(menu_title + "-" + String.valueOf(currentPage));
+                cards.addAll(loadCacheCard);
+                faAdapter.notifyDataSetChanged();
             }
         }
     }
@@ -329,6 +360,16 @@ public class FacebookFragment extends Fragment {
                 Log.e("fadong", "invalid vid");
             }
         }
+    }
+    private List<Card> loadCacheCard(String param) {
+        String[] params = param.split("-");
+        AsyncTask<String, Void, List<Card>> execute = new CallCards().execute(params[0], params[1]);
+        try {
+            return execute.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return Lists.newArrayList();
     }
 }
 

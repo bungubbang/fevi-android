@@ -1,10 +1,17 @@
 package com.fevi.fadong;
 
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -24,11 +31,22 @@ import com.fevi.fadong.adapter.MenuListAdapter;
 import com.fevi.fadong.adapter.dto.MenuList;
 import com.fevi.fadong.domain.Member;
 import com.fevi.fadong.support.MemberService;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.common.collect.Lists;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
 public class MainActivity extends ActionBarActivity {
+
+    private static final String VERSION_CHECK_URL = "http://munsangdong.cafe24.com/version";
 
     private String[] mPlanetTitles;
     private DrawerLayout mDrawerLayout;
@@ -44,6 +62,8 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        new CheckVersion().execute();
 
         loginPreferences = getSharedPreferences(getResources().getString(R.string.loginPref), MODE_PRIVATE);
         checkLogin();
@@ -99,7 +119,6 @@ public class MainActivity extends ActionBarActivity {
         if (savedInstanceState == null) {
             selectItem(0);
         }
-
     }
 
     @Override
@@ -168,6 +187,16 @@ public class MainActivity extends ActionBarActivity {
         mDrawerList.setItemChecked(position, true);
         setTitle(mPlanetTitles[position]);
         mDrawerLayout.closeDrawer(leftDrawer);
+
+        App application = (App) getApplication();
+        Tracker tracker = application.getDefaultTracker();
+
+        tracker.setScreenName("Facebook Fragment");
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Fragment")
+                .setAction("click")
+                .setLabel(mPlanetTitles[position])
+                .build());
     }
 
     @Override
@@ -191,5 +220,70 @@ public class MainActivity extends ActionBarActivity {
             this.startActivity(loginIntent);
             this.finish();
         }
+    }
+
+    class CheckVersion extends AsyncTask {
+        @Override
+        protected Object doInBackground(Object[] params) {
+            try {
+                String versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+
+                HttpURLConnection connection = (HttpURLConnection) new URL(VERSION_CHECK_URL).openConnection();
+                connection.setRequestMethod("GET");
+                connection.setRequestProperty("Content-Type", "application/json");
+
+                InputStream inputStream = connection.getInputStream();
+                byte[] contents = new byte[1024];
+
+                int bytesRead=0;
+                StringBuilder sb = new StringBuilder();
+                while( (bytesRead = inputStream.read(contents)) != -1){
+                    sb.append(new String(contents, 0, bytesRead));
+                }
+
+                JSONObject result = new JSONObject(sb.toString());
+                String requestVersion = result.getString("version");
+                boolean forceUpdate = result.getBoolean("forceUpdate");
+                if(!versionName.equals(requestVersion)) {
+                    final AlertDialog.Builder builder;
+                    if(forceUpdate) {
+                        builder = new AlertDialog.Builder(MainActivity.this)
+                                .setTitle("새로운 버젼이 출시 되었습니다.")
+                                .setMessage("필수 업데이트 버젼입니다. 마켓으로 이동합니다.")
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        moveMarket();
+                                    }
+                                });
+                    } else {
+                        builder = new AlertDialog.Builder(MainActivity.this)
+                                .setTitle("새로운 버젼이 출시 되었습니다.")
+                                .setMessage("마켓으로 이동하시겠습니까?")
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        moveMarket();
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.no, null);
+                    }
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            builder.show();
+                        }
+                    });
+                }
+
+            } catch (PackageManager.NameNotFoundException | IOException | JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+
+    private void moveMarket() {
+
     }
 }

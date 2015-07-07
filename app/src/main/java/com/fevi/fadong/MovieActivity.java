@@ -26,6 +26,8 @@ import com.fevi.fadong.support.CircleTransform;
 import com.fevi.fadong.support.ContextString;
 import com.fevi.fadong.support.WebViewSetting;
 import com.fevi.fadong.support.db.WatchVidService;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashSet;
@@ -121,7 +123,7 @@ public class MovieActivity extends Activity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                WatchVidService watchVidService = new WatchVidService(getApplicationContext());
+                WatchVidService watchVidService = WatchVidService.getInstance(getApplicationContext());
 
                 if (!watchVidService.exist(memberId, cardId)) {
                     new AddExperienceCall(getApplicationContext()).execute(cardId);
@@ -142,6 +144,16 @@ public class MovieActivity extends Activity {
                 return (event.getAction() == MotionEvent.ACTION_MOVE);
             }
         });
+
+        App application = (App) getApplication();
+        Tracker tracker = application.getDefaultTracker();
+
+        tracker.setScreenName("Movie Activity");
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("MOVIE")
+                .setAction("show")
+                .setLabel(cardId)
+                .build());
 
 
     }

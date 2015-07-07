@@ -1,20 +1,39 @@
 package com.fevi.fadong;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.facebook.FacebookSdk;
 import com.fevi.fadong.domain.Member;
 import com.fevi.fadong.support.LoginCall;
 import com.fevi.fadong.support.MemberInfoFactory;
+import com.fevi.fadong.support.NetworkManager;
 import com.google.common.base.Strings;
 import com.nextapps.naswall.NASWall;
 import com.parse.Parse;
 import com.parse.ParseInstallation;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 
 
 public class IntroActivity extends Activity {
@@ -32,8 +51,12 @@ public class IntroActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
 
-        parseInit();
+        if (!NetworkManager.isOnline(this)) {
+            Toast.makeText(this, "해당 앱을 사용하려면 인터넷에 접속하여야 합니다. 인터넷에 접속후 다시 실행해 주십시오.", Toast.LENGTH_LONG).show();
+            return;
+        }
 
+        FacebookSdk.sdkInitialize(this);
         NASWall.init(this, false);
 
         vid = getIntent().getStringExtra("vid");
@@ -85,8 +108,6 @@ public class IntroActivity extends Activity {
         this.finish();
     }
 
-    private void parseInit() {
-        Parse.initialize(this, "2iC7nc2t8jrm8DFPtV03BT1TiXODEkNy6cUomq95", "N8HSWDLfQqDKQ1d5okDbYuIHJtgg7yjugSdffDo1");
-        ParseInstallation.getCurrentInstallation().saveInBackground();
-    }
+
+
 }
