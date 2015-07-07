@@ -46,6 +46,5 @@ public class WatchVidService {
         cv.put("member_id", memberId);
         cv.put("vid", vid);
         long insert = db.insert(TABLE_NAME, null, cv);
-        Log.e("insert", "result : " + insert);
     }
 }

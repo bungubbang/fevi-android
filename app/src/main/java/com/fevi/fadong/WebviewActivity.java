@@ -9,6 +9,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import com.fevi.fadong.support.WebViewSetting;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import java.io.File;
 
@@ -26,5 +28,14 @@ public class WebviewActivity extends Activity {
         WebViewSetting.appin(this, webView);
 
         webView.loadUrl(intent.getStringExtra("url"));
+
+        App application = (App) getApplication();
+        Tracker tracker = application.getDefaultTracker();
+
+        tracker.setScreenName("Webview Activity");
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("webview")
+                .setAction("show")
+                .build());
     }
 }

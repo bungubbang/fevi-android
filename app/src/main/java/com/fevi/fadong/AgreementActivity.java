@@ -12,6 +12,9 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 
 public class AgreementActivity extends Activity {
 
@@ -68,6 +71,15 @@ public class AgreementActivity extends Activity {
                     v.getContext().startActivity(intent);
             }
         });
+
+        App application = (App) getApplication();
+        Tracker tracker = application.getDefaultTracker();
+
+        tracker.setScreenName("Agreement Activity");
+        tracker.send(new HitBuilders.EventBuilder()
+            .setCategory("agreement")
+            .setAction("show")
+            .build());
     }
 
 

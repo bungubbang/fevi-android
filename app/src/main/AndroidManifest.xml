@@ -79,14 +79,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LevelUpActivity"
-            android:label="@string/title_activity_level_up" >
-        </activity>
-        <activity
-            android:name=".VideoIntentActivity"
-            android:label="@string/title_activity_video_intent" >
-        </activity>
-        <activity
             android:name=".WebviewActivity"
             android:label="@string/title_activity_webview"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >

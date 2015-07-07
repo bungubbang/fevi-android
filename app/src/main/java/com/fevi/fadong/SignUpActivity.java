@@ -15,6 +15,8 @@ import android.widget.Toast;
 import com.fevi.fadong.domain.Member;
 import com.fevi.fadong.support.FadongHttpClient;
 import com.fevi.fadong.support.MemberInfoFactory;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import java.util.concurrent.ExecutionException;
 
@@ -75,6 +77,14 @@ public class SignUpActivity extends Activity {
             }
         });
 
+        App application = (App) getApplication();
+        Tracker tracker = application.getDefaultTracker();
+
+        tracker.setScreenName("SignUp Activity");
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("signup")
+                .setAction("show")
+                .build());
 
     }
 

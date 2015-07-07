@@ -16,6 +16,8 @@ import android.widget.Toast;
 import com.fevi.fadong.domain.Member;
 import com.fevi.fadong.support.FadongHttpClient;
 import com.fevi.fadong.support.MemberInfoFactory;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 
 public class LoginActivity extends Activity {
@@ -65,6 +67,15 @@ public class LoginActivity extends Activity {
                 v.getContext().startActivity(intent);
             }
         });
+
+        App application = (App) getApplication();
+        Tracker tracker = application.getDefaultTracker();
+
+        tracker.setScreenName("Login Activity");
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("login")
+                .setAction("show")
+                .build());
     }
 
     private void checkLoginCode(Context context, Member member, boolean isAutoLogin) {

@@ -20,6 +20,8 @@ import com.fevi.fadong.domain.Member;
 import com.fevi.fadong.support.LoginCall;
 import com.fevi.fadong.support.MemberInfoFactory;
 import com.fevi.fadong.support.NetworkManager;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.common.base.Strings;
 import com.nextapps.naswall.NASWall;
 import com.parse.Parse;
@@ -50,6 +52,15 @@ public class IntroActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
+
+        App application = (App) getApplication();
+        Tracker tracker = application.getDefaultTracker();
+
+        tracker.setScreenName("Intro Activity");
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("intro")
+                .setAction("show")
+                .build());
 
         if (!NetworkManager.isOnline(this)) {
             Toast.makeText(this, "해당 앱을 사용하려면 인터넷에 접속하여야 합니다. 인터넷에 접속후 다시 실행해 주십시오.", Toast.LENGTH_LONG).show();
