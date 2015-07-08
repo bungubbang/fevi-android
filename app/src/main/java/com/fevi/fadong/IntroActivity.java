@@ -3,6 +3,7 @@ package com.fevi.fadong;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -20,6 +22,7 @@ import com.fevi.fadong.domain.Member;
 import com.fevi.fadong.support.LoginCall;
 import com.fevi.fadong.support.MemberInfoFactory;
 import com.fevi.fadong.support.NetworkManager;
+import com.google.android.gcm.GCMRegistrar;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.common.base.Strings;
@@ -48,19 +51,45 @@ public class IntroActivity extends Activity {
 
     private String vid;
 
+    private static final String SENDER_ID = "34043858841";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
 
-        App application = (App) getApplication();
-        Tracker tracker = application.getDefaultTracker();
+        sendGA();
 
-        tracker.setScreenName("Intro Activity");
-        tracker.send(new HitBuilders.EventBuilder()
-                .setCategory("intro")
-                .setAction("show")
-                .build());
+        // Make sure the device has the proper dependencies.
+        GCMRegistrar.checkDevice(this);
+
+        // Make sure the manifest was properly set - comment out this line
+        // while developing the app, then uncomment it when it's ready.
+        GCMRegistrar.checkManifest(this);
+
+    //    	registerReceiver(mHandleMessageReceiver, new IntentFilter(
+    //    			DISPLAY_MESSAGE_ACTION));
+
+        // Get GCM registration id
+        final String aregId = GCMRegistrar.getRegistrationId(this);
+
+        // Check if regid already presents
+        if (aregId.isEmpty()) {
+            // Registration is not present, register now with GCM
+            GCMRegistrar.register(this, SENDER_ID);
+            Log.i("mundong", "registered with GCM");
+        } else {
+            // Device is already registered on GCM
+            if (GCMRegistrar.isRegisteredOnServer(this)) {
+                // Skips registration.
+                Log.i("mundong", "Already registered with GCM");
+            } else {
+                GCMRegistrar.register(this, SENDER_ID);
+            }
+        }
+
+
 
         if (!NetworkManager.isOnline(this)) {
             Toast.makeText(this, "해당 앱을 사용하려면 인터넷에 접속하여야 합니다. 인터넷에 접속후 다시 실행해 주십시오.", Toast.LENGTH_LONG).show();
@@ -91,6 +120,20 @@ public class IntroActivity extends Activity {
             this.finish();
         }
 
+    }
+
+    private void sendGA() {
+        /**
+         * GA setting
+         */
+        App application = (App) getApplication();
+        Tracker tracker = application.getDefaultTracker();
+
+        tracker.setScreenName("Intro Activity");
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("intro")
+                .setAction("show")
+                .build());
     }
 
     @Override

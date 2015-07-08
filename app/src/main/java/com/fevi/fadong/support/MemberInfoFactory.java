@@ -3,6 +3,7 @@ package com.fevi.fadong.support;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.telephony.TelephonyManager;
@@ -35,6 +36,9 @@ public class MemberInfoFactory {
         String appVer = pi.versionName;
 
 
+        SharedPreferences pref = context.getSharedPreferences("pref", Context.MODE_PRIVATE);
+
+        String new_reg = pref.getString("REG_ID","");
 
         //휴대폰 정보 빼내기
         TelephonyManager telephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -61,7 +65,7 @@ public class MemberInfoFactory {
         member.setMcc(mcc == null? "": mcc);
         member.setFacebookId(facebookId);
         member.setGoogleId(googleId);
-        member.setGcm("");
+        member.setGcm(new_reg);
 
         return member;
     }

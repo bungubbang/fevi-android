@@ -82,30 +82,6 @@ public class AgreementActivity extends Activity {
             .build());
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_agreement, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-
     private static final String AGREE_USE = "제 1 조 - [목적]\n" +
             "이 약관은 AiK Games(이하 “회사”라고 함)가 디바이스를 통해 제공하는 모든 게임 및 제반 서비스의 이용과 관련하여 회사와 이용자 간의 권리와 의무 및 필요한 제반 사항을 정하는데 그 목적이 있습니다.\n" +
             "제 2 조 - [용어의 정의] \n" +

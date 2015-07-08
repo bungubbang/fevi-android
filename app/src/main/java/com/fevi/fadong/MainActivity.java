@@ -122,13 +122,6 @@ public class MainActivity extends ActionBarActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
@@ -147,13 +140,6 @@ public class MainActivity extends ActionBarActivity {
         // true, then it has handled the app icon touch event
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
-        }
-        // Handle your other action bar items...
-        switch (item.getItemId()) {
-            case R.id.fadong_logout:
-                MemberService.logout(this);
-                this.finish();
-                break;
         }
 
         return super.onOptionsItemSelected(item);

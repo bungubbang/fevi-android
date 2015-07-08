@@ -91,7 +91,7 @@
 
         <WebView
             android:layout_width="match_parent"
-            android:layout_height="55dp"
+            android:layout_height="100dp"
             android:id="@+id/webView"
             android:scrollbars="none"
             android:background="#fff"/>
