@@ -117,5 +117,62 @@
         />
 
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/review">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#111"
+            android:id="@+id/review_background"></RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="동영상 시청 : 경험치 +1\n동영상 공유 : 공유 1회당 경험치 +1 (추첨통해 문상지급)\n레벨 10달성하신 모든 분께 문화상품권을 드립니다.\n문상은 10000권, 5000원권, 1000원권 중 랜덤으로 지급됩니다."
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="12dp"
+            android:textColor="#eee"
+            android:id="@+id/below_text"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/below_text"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/review_button">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:background="#de6860"
+                android:textColor="#fff"
+                android:text="별 5개 리뷰 작성"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_vertical"
+                android:id="@+id/review_star"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/review_star"
+                android:text="문상은 리뷰 작성자에 한해 지급됨"
+                android:textColor="#eee"
+                android:layout_centerHorizontal="true"/>
+        </RelativeLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="X"
+            android:textColor="#eee"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/review_close"/>
+    </RelativeLayout>
 
 </RelativeLayout>

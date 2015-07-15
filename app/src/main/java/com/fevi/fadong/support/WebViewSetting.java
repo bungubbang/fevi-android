@@ -195,8 +195,6 @@ public class WebViewSetting {
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(sharerUrl));
                 activity.startActivity(intent);
             }
-
-//            shareDialog.show(activity, content);
         }
     }
 }

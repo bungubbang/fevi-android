@@ -3,6 +3,7 @@ package com.fevi.fadong;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
 import com.fevi.fadong.adapter.FaAdapter;
 import com.fevi.fadong.adapter.dto.Card;
 import com.fevi.fadong.domain.Member;
@@ -87,6 +89,10 @@ public class FacebookFragment extends Fragment {
         SharedPreferences preferences = rootView.getContext().getSharedPreferences(getResources().getString(R.string.loginPref), rootView.getContext().MODE_PRIVATE);
         final String id = preferences.getString("id", null);
         final String password = preferences.getString("password", null);
+
+        RoundCornerProgressBar progressBar = (RoundCornerProgressBar) rootView.findViewById(R.id.progress);
+        progressBar.setProgressColor(Color.parseColor("#56d2c2"));
+        progressBar.setBackgroundLayoutColor(Color.parseColor("#DCDCDC"));
 
         final Activity activity = (Activity) rootView.getContext();
 
@@ -203,10 +209,12 @@ public class FacebookFragment extends Fragment {
                 activity.startActivity(intent);
             }
 
-            TextView barName = (TextView) view.findViewById(R.id.profile_bar_name);
-            barName.setText(member.getId());
             TextView barRuby = (TextView) view.findViewById(R.id.profile_bar_ruby);
-            barRuby.setText("Lev : " + uri.getQueryParameter("level") + ", Exp : " + uri.getQueryParameter("exp") + " / " + uri.getQueryParameter("next_exp") + ", Ruby : " + uri.getQueryParameter("rubi"));
+            barRuby.setText("Lev : " + uri.getQueryParameter("level") + " ( " + uri.getQueryParameter("exp") + " / " + uri.getQueryParameter("next_exp") + " ), Ruby : " + uri.getQueryParameter("rubi"));
+
+            RoundCornerProgressBar progressBar = (RoundCornerProgressBar) view.findViewById(R.id.progress);
+            progressBar.setMax(Float.parseFloat(uri.getQueryParameter("next_exp")));
+            progressBar.setProgress(Float.parseFloat(uri.getQueryParameter("exp")));
         }
     }
 

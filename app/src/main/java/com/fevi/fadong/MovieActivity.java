@@ -18,6 +18,7 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -155,7 +156,23 @@ public class MovieActivity extends Activity {
                 .setLabel(cardId)
                 .build());
 
+        RelativeLayout review = (RelativeLayout) findViewById(R.id.review);
+        review.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.setVisibility(View.GONE);
+            }
+        });
 
+        RelativeLayout reviewButton = (RelativeLayout) findViewById(R.id.review_button);
+        reviewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent market = new Intent(Intent.ACTION_VIEW);
+                market.setData(Uri.parse("market://details?id=com.fevi.fadong"));
+                startActivity(market);
+            }
+        });
     }
 
     @Override

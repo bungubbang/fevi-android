@@ -36,4 +36,5 @@ dependencies {
     compile 'com.parse.bolts:bolts-android:1.+'
     compile 'com.facebook.android:facebook-android-sdk:4.3.0'
     compile 'com.google.android.gms:play-services-analytics:7.5.0'
+    compile 'com.akexorcist:RoundCornerProgressBar:1.2.0'
 }
