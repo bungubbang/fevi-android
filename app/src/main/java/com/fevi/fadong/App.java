@@ -2,10 +2,12 @@ package com.fevi.fadong;
 
 import android.app.Application;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.parse.Parse;
 import com.parse.ParseInstallation;
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by 1000742 on 15. 7. 3..
@@ -17,6 +19,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
 
         parseInit();
     }

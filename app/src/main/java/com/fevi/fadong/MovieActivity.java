@@ -14,11 +14,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewParent;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -161,6 +163,17 @@ public class MovieActivity extends Activity {
             @Override
             public void onClick(View v) {
                 v.setVisibility(View.GONE);
+            }
+        });
+
+        ScrollView scrollView = (ScrollView) findViewById(R.id.review_text);
+        scrollView.requestDisallowInterceptTouchEvent(true);
+
+        TextView belowText = (TextView) findViewById(R.id.below_text);
+        belowText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((View) view.getParent().getParent()).setVisibility(View.GONE);
             }
         });
 

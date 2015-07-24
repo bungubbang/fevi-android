@@ -213,6 +213,9 @@
         </receiver>
         <service android:name=".GCMIntentService" />
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="05b0cb8d3914d28e69bec50099cc5bb339a69150" />
     </application>
 
 </manifest>

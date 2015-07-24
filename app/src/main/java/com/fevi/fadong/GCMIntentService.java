@@ -97,7 +97,7 @@ public class GCMIntentService extends GCMBaseIntentService {
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
         PendingIntent contentIntent;
-       if(target_url.isEmpty()){
+       if(target_url == null || target_url.isEmpty()){
     	   contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, IntroActivity.class), 0);
 
        }else{
@@ -105,7 +105,7 @@ public class GCMIntentService extends GCMBaseIntentService {
        }
        
        Bitmap mainIcon;
-       if(bigicon.isEmpty()){
+       if(bigicon == null || bigicon.isEmpty()){
     	   mainIcon = BitmapFactory.decodeResource(getResources(),
                    R.drawable.ic_launcher);
        }else{
