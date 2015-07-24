@@ -5,13 +5,21 @@
     tools:context="com.fevi.fadong.WebviewActivity">
 
 
-    <ImageView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/mundong"
-        android:src="@drawable/mundong"
-        android:layout_margin="10dp"
-        android:layout_gravity="center_horizontal" />
+        android:background="#02a6ec">
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/mundong"
+            android:layout_gravity="center_horizontal"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+
+
 
     <WebView
         android:layout_width="match_parent"

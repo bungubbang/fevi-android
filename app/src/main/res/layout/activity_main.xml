@@ -23,7 +23,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:background="@drawable/blurred_background">
+            android:background="#02a6ec">
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
