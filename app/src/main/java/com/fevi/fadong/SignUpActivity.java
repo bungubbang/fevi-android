@@ -51,8 +51,13 @@ public class SignUpActivity extends Activity {
 
             @Override
             public void onClick(View v) {
+                String signupId = idView.getText().toString();
+                if (!signupId.matches("[a-zA-Z0-9]+")) {
+                    Toast.makeText(v.getContext(), "아이디는 영어 및 숫자로만 조합되어야 합니다.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-                member.setId(idView.getText().toString());
+                member.setId(signupId);
                 member.setPassword(passwordView.getText().toString());
                 member.setPasswordRepeat(passwordViewRepeat.getText().toString());
 
@@ -60,7 +65,7 @@ public class SignUpActivity extends Activity {
                     Log.e("member", member.getParameter());
                     try {
                         String result = (String) new SignUpCall().execute(member).get();
-                        if(result.equals("code=0")) {
+                        if (result.equals("code=0")) {
                             Toast.makeText(v.getContext(), "이미 사용중인 아이디입니다.", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(v.getContext(), "회원가입이 완료 되었습니다.", Toast.LENGTH_SHORT).show();

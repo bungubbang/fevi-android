@@ -213,6 +213,7 @@ public class MainActivity extends ActionBarActivity {
         protected Object doInBackground(Object[] params) {
             try {
                 String versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+                int versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
 
                 HttpURLConnection connection = (HttpURLConnection) new URL(VERSION_CHECK_URL).openConnection();
                 connection.setRequestMethod("GET");
@@ -230,7 +231,9 @@ public class MainActivity extends ActionBarActivity {
                 JSONObject result = new JSONObject(sb.toString());
                 String requestVersion = result.getString("version");
                 boolean forceUpdate = result.getBoolean("forceUpdate");
-                if(!versionName.equals(requestVersion)) {
+                int versionCodeJson = result.getInt("versionCode");
+
+                if(!versionName.equals(requestVersion) && versionCode < versionCodeJson ) {
                     final AlertDialog.Builder builder;
                     if(forceUpdate) {
                         builder = new AlertDialog.Builder(MainActivity.this)

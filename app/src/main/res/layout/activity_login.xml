@@ -27,6 +27,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/fa_id_field"
             android:layout_gravity="center_horizontal"
+            android:inputType="text"
             android:hint="ID"/>
 
         <EditText
@@ -70,6 +71,16 @@
             android:layout_gravity="center_horizontal" />
 
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="AiK Games 통합 아이디를 사용합니다."
+        android:id="@+id/textView2"
+        android:layout_below="@+id/fa_fill"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>

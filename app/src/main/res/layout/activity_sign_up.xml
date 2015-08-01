@@ -16,6 +16,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/signup_id"
         android:layout_gravity="center_horizontal"
+        android:inputType="text"
         android:hint="ID"/>
 
     <EditText
