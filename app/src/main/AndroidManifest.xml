@@ -140,12 +140,13 @@
 
 
         <!-- NAS setting -->
+        <meta-data android:name="naswall_app_key" android:value="@string/NAS_WALL_APP_KEY" />
+
         <activity android:name="com.nextapps.naswall.NASWallBrowser" android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="@string/NAS_WALL_APP_KEY" android:host="ksc" />
             </intent-filter>
         </activity>
 
